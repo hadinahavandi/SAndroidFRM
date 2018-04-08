@@ -1,0 +1,56 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="layout.PurchaseFragment"
+    android:layout_marginTop="45dp">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:id="@+id/lblaccountbalance"/>
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/wallet"
+        android:id="@+id/moneyicon"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/lblaccountbalance"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lblprice"
+            android:text="مبلغ شارژ"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="ریال"
+            android:layout_alignParentTop="true"
+            android:id="@+id/lblpricecurrency"/>
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtprice"
+            android:text="0"
+            android:layout_toLeftOf="@id/lblprice"
+            android:layout_toRightOf="@id/lblpricecurrency"
+            android:textAlignment="center"
+            android:layout_alignParentTop="true"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnPay"
+            android:layout_centerHorizontal="true"
+            android:text="پرداخت"
+            android:layout_below="@+id/txtprice"/>
+    </RelativeLayout>
+
+</RelativeLayout>

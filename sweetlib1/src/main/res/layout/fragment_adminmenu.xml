@@ -1,0 +1,62 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="layout.AboutUsFragment"
+    android:padding="10dp"
+    android:paddingTop="60dp">
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_manage_doctors"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:text="مدیریت پزشکان" />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_manage_speciality"
+                android:layout_below="@id/btn_manage_doctors"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:text="مدیریت تخصص ها" />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_manage_voices"
+                android:layout_below="@id/btn_manage_speciality"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:text="مدیریت فایل های صوتی" />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_manage_transactions"
+                android:layout_below="@id/btn_manage_voices"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:text="مشاهده تراکنش ها" />
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+</ScrollView>
+    <!-- TODO: Update blank fragment layout -->
+
+
+</RelativeLayout>

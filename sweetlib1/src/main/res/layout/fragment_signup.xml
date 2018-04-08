@@ -1,0 +1,148 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="layout.LoginFragment">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:scaleType="centerCrop"
+        android:id="@+id/pagebg"/>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true">
+    <TextView
+        android:id="@+id/lblmobile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textColor="#fff"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:text="موبایل" />
+
+    <EditText
+        android:id="@+id/txtmobile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/txtusername"
+        android:layout_below="@+id/lblmobile"
+        android:ems="10"
+        android:inputType="number"
+        android:textColor="#fff"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:maxLength="11" />
+
+    <TextView
+        android:id="@+id/lblname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/txtmobile"
+        android:textColor="#fff"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:text="نام و نام خانوادگی" />
+    <EditText
+        android:id="@+id/txtname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/lblname"
+        android:ems="10"
+        android:inputType="textCapCharacters"
+        android:textColor="#fff"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:maxLength="25"/>
+    <TextView
+        android:id="@+id/lblusername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/txtname"
+        android:textColor="#fff"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:text="نام کاربری" />
+    <EditText
+        android:id="@+id/txtusername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/lblusername"
+        android:ems="10"
+        android:inputType="textCapCharacters"
+        android:textColor="#fff"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:maxLength="25" />
+
+    <TextView
+        android:id="@+id/lblpassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/txtusername"
+        android:textColor="#fff"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:text="کلمه عبور" />
+    <EditText
+        android:id="@+id/txtpassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/lblpassword"
+        android:ems="10"
+        android:inputType="textWebPassword"
+        android:textColor="#fff"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:maxLength="10" />
+
+    <TextView
+        android:id="@+id/lblpassword2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/txtpassword"
+        android:textColor="#fff"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:text="تکرار کلمه عبور" />
+    <EditText
+        android:id="@+id/txtpassword2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:inputType="textWebPassword"
+        android:layout_below="@+id/lblpassword2"
+        android:textColor="#fff"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:maxLength="10" />
+
+    <Button
+        android:id="@+id/btnsignup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtpassword2"
+        android:layout_centerHorizontal="true"
+        android:text="عضویت" />
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:id="@+id/progressbar"/>
+
+</RelativeLayout>
+</RelativeLayout>

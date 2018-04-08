@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_mainmenu"
+            android:icon="@mipmap/ic_class"
+            android:iconTint="#fff"
+            android:title="منوی اصلی" />
+        <item
+            android:id="@+id/nav_buy"
+            android:icon="@mipmap/ic_buy"
+            android:iconTint="#fff"
+            android:title="مدیریت اعتبار" />
+
+        <item
+            android:id="@+id/nav_orderlist"
+            android:icon="@mipmap/ic_buy"
+            android:iconTint="#fff"
+            android:title="سوابق سفارش" />
+        <item
+            android:id="@+id/nav_contactus"
+            android:icon="@mipmap/ic_contactus"
+            android:title="درباره ما" />
+        <item
+            android:id="@+id/nav_aboutdeveloper"
+            android:icon="@mipmap/ic_contactus"
+            android:title="درباره توسعه دهنده" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@mipmap/ic_contactus"
+            android:title="خروج از حساب" />
+    </group>
+
+
+</menu>

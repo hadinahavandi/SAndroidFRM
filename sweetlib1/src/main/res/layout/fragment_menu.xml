@@ -1,0 +1,89 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="layout.AboutUsFragment"
+    android:padding="5dp">
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerInParent="true"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentBottom="true"
+    android:layout_marginTop="60dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentTop="true"
+                android:id="@+id/middlebar"/>
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:id="@+id/btn_reserve_doctor"
+                android:layout_toLeftOf="@id/middlebar"
+                android:src="@drawable/doctor"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:id="@+id/btn_reserve_dentist"
+                android:layout_toRightOf="@id/btn_reserve_doctor"
+                android:src="@drawable/dentist"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:id="@+id/btn_reserve_psychology"
+                android:layout_toLeftOf="@id/middlebar"
+                android:src="@drawable/psychology"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@id/btn_reserve_doctor"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:id="@+id/btn_reserve_beautyshop"
+                android:layout_toRightOf="@id/middlebar"
+                android:src="@drawable/beautyshop"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/btn_reserve_dentist"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:id="@+id/btn_reserve_voicestory"
+                android:src="@drawable/story"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/btn_reserve_beautyshop"
+                />
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+</ScrollView>
+    <!-- TODO: Update blank fragment layout -->
+
+
+</RelativeLayout>

@@ -1,0 +1,54 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="layout.AboutUsFragment"
+    android:padding="10dp"
+    android:paddingTop="60dp">
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_getreserves"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:text="مشاهده رزرو ها" />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_manageplans"
+                android:layout_below="@id/btn_getreserves"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:text="مدیریت وقت های ویزیت" />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_getbalance"
+                android:layout_below="@id/btn_manageplans"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:text="وضعیت موجودی حساب" />
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+</ScrollView>
+    <!-- TODO: Update blank fragment layout -->
+
+
+</RelativeLayout>

@@ -1,0 +1,80 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="layout.LoginFragment">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:scaleType="centerCrop"
+        android:id="@+id/pagebg"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+        <TextView
+            android:id="@+id/lblusername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentTop="true"
+            android:textColor="#fff"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:text="نام کاربری" />
+        <EditText
+            android:id="@+id/txtusername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/lblusername"
+            android:ems="10"
+            android:inputType="textCapCharacters"
+            android:textColor="#fff"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:maxLength="25" />
+
+        <TextView
+            android:id="@+id/lblpassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/txtusername"
+            android:textColor="#fff"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:text="کلمه عبور" />
+        <EditText
+            android:id="@+id/txtpassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/lblpassword"
+            android:ems="10"
+            android:inputType="textWebPassword"
+            android:textColor="#fff"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:maxLength="20" />
+
+
+        <Button
+            android:id="@+id/btnlogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtpassword"
+            android:layout_centerHorizontal="true"
+            android:text="ورود به سیستم" />
+<ProgressBar
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
+    android:visibility="gone"
+    android:id="@+id/progressbar"/>
+
+    </RelativeLayout>
+</RelativeLayout>

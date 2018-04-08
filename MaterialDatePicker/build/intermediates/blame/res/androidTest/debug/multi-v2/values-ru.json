@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "G:\\Projects\\Business\\OCMS\\AndroidProject\\MaterialDatePicker\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-ru\\values-ru.xml",
+            "map": [
+                {
+                    "source": "G:\\Projects\\Business\\OCMS\\AndroidProject\\MaterialDatePicker\\build\\intermediates\\bundles\\debug\\res\\values-ru\\values-ru.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "105,166,269,387,468,581,706,821,917,1007,1101,1189",
+                        "endColumns": "60,102,117,80,112,124,114,95,89,93,87,103",
+                        "endOffsets": "161,264,382,463,576,701,816,912,1002,1096,1184,1288"
+                    }
+                }
+            ]
+        }
+    ]
+}

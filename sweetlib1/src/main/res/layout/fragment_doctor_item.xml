@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="65dp">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/mainlayout">
+
+                <ImageView
+                    android:id="@+id/lbl_photo_flu_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_margin="@dimen/text_margin"
+                    android:text=" "
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="#333" />
+                <TextView
+                    android:id="@+id/lbl_name_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/lbl_photo_flu_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="@dimen/text_margin"
+                    android:text=" "
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="#333" />
+
+                <TextView
+                    android:id="@+id/lbl_family_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/lbl_photo_flu_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:layout_toLeftOf="@id/lbl_name_content"
+                    android:text=" "
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="#333" />
+
+                <TextView
+                    android:id="@+id/lbl_nezam_code_caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@id/lbl_family_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:text="کد نظام پزشکی:"
+                    android:visibility="gone"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="#333" />
+
+                <TextView
+                    android:id="@+id/lbl_nezam_code_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/lbl_family_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:layout_toLeftOf="@id/lbl_nezam_code_caption"
+                    android:text=" "
+                    android:visibility="gone"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="#333" />
+
+                <TextView
+                    android:id="@+id/lbl_email_caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@id/lbl_nezam_code_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:text="ایمیل:"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="#333" />
+
+                <TextView
+                    android:id="@+id/lbl_email_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/lbl_nezam_code_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:layout_toLeftOf="@id/lbl_email_caption"
+                    android:text=" "
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="#333" />
+
+                <TextView
+                    android:id="@+id/lbl_tel_caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@id/lbl_email_caption"
+                    android:layout_margin="@dimen/text_margin"
+                    android:text="تلفن:"
+                    android:visibility="gone"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="#333" />
+
+                <TextView
+                    android:id="@+id/lbl_tel_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/lbl_email_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:layout_toLeftOf="@id/lbl_tel_caption"
+                    android:text=" "
+                    android:visibility="gone"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="#333" />
+
+                <TextView
+                    android:id="@+id/lbl_speciality_fid_caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/lbl_tel_caption"
+                    android:layout_margin="@dimen/text_margin"
+                    android:layout_alignParentRight="true"
+                    android:text="تخصص: "
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="#333" />
+                <TextView
+                    android:id="@+id/lbl_speciality_fid_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/lbl_tel_content"
+                    android:layout_toLeftOf="@id/lbl_speciality_fid_caption"
+                    android:layout_margin="@dimen/text_margin"
+                    android:text=""
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="#333" />
+
+                <TextView
+                    android:id="@+id/lbl_education_caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@id/lbl_speciality_fid_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:text="تحصیلات:"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="#333" />
+
+                <TextView
+                    android:id="@+id/lbl_education_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/lbl_speciality_fid_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_margin="@dimen/text_margin"
+                    android:layout_toLeftOf="@id/lbl_education_caption"
+                    android:text=""
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="#333" />
+
+                <TextView
+                    android:id="@+id/lbl_matabtel_caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@id/lbl_education_caption"
+                    android:layout_margin="@dimen/text_margin"
+                    android:text="تلفن:"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="#333" />
+
+                <TextView
+                    android:id="@+id/lbl_matabtel_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/lbl_education_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:layout_toLeftOf="@id/lbl_matabtel_caption"
+                    android:text=" "
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="#333" />
+
+                <TextView
+                    android:id="@+id/lbl_matabaddress_caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@id/lbl_matabtel_caption"
+                    android:layout_margin="@dimen/text_margin"
+                    android:text="آدرس:"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="#333" />
+
+                <TextView
+                    android:id="@+id/lbl_matabaddress_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/lbl_matabtel_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_margin="@dimen/text_margin"
+                    android:layout_toLeftOf="@id/lbl_matabaddress_caption"
+                    android:text=" "
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="#333" />
+
+
+                <TextView
+                    android:id="@+id/lbl_price_caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@id/lbl_matabaddress_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:text="هزینه مراجعه:"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="#333" />
+
+                <TextView
+                    android:id="@+id/lbl_price_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/lbl_matabaddress_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_margin="@dimen/text_margin"
+                    android:layout_toLeftOf="@id/lbl_price_caption"
+                    android:text=" "
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="#333" />
+
+                <Button
+                    android:id="@+id/btn_reserve"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/lbl_price_caption"
+                    android:layout_centerHorizontal="true"
+                    android:text="رزرو وقت" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:id="@+id/fileimage"/>
+    <VideoView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:id="@+id/filevideo" />
+</RelativeLayout>
