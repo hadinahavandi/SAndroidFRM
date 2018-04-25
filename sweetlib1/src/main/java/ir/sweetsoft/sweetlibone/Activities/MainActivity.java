@@ -73,6 +73,9 @@ public class MainActivity extends AppCompatActivity
     private Stack<Class> FragmentCallList;
     private TextView titleBar;
     public WebView mainWebView;
+    private boolean SharedConf_hasWebView=true;
+    private boolean SharedConf_hasUserManagement=true;
+    private int LayoutID=-1;
     public void setTitleText(String Text)
     {
         titleBar.setText(Text);
@@ -100,29 +103,49 @@ public class MainActivity extends AppCompatActivity
             imgmenu.setVisibility(View.VISIBLE);
         }
     }
+
+    protected void setSharedConf_hasWebView(boolean sharedConf_hasWebView) {
+        SharedConf_hasWebView = sharedConf_hasWebView;
+    }
+
+    protected void setSharedConf_hasUserManagement(boolean sharedConf_hasUserManagement) {
+        SharedConf_hasUserManagement = sharedConf_hasUserManagement;
+    }
+
+    public void setLayoutID(int layoutID) {
+        LayoutID = layoutID;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FragmentCallList=new Stack<>();
-        setContentView(ir.sweetsoft.sweetlibone.R.layout.activity_main);
-        mainWebView = (WebView)findViewById(R.id.webview);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            mainWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-        } else {
-            mainWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        if(LayoutID<0)
+            LayoutID=ir.sweetsoft.sweetlibone.R.layout.activity_main;
+
+        setContentView(LayoutID);
+        if(SharedConf_hasWebView)
+        {
+            mainWebView = (WebView)findViewById(R.id.webview);
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                mainWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+            } else {
+                mainWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+            }
+
+            WebSettings webSettings = mainWebView.getSettings();
+            webSettings.setJavaScriptEnabled(true);
+            mainWebView.setVerticalScrollBarEnabled(false);
+            webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
+            webSettings.setPluginState(WebSettings.PluginState.ON);
+            mainWebView.setWebViewClient(new WebViewClient() {
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    return false;
+                }
+            });
         }
 
-        WebSettings webSettings = mainWebView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        mainWebView.setVerticalScrollBarEnabled(false);
-        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
-        webSettings.setPluginState(WebSettings.PluginState.ON);
-        mainWebView.setWebViewClient(new WebViewClient() {
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                return false;
-            }
-        });
 
         if(shouldAskPermission())
             requestFileAccessPermission(1147);
@@ -149,21 +172,25 @@ public class MainActivity extends AppCompatActivity
         });
         TextView settingstitle=(TextView)navigationView.getHeaderView(0).findViewById(R.id.settingstitle);
         settingstitle.setTypeface(face);
-        String UserName= getSharedPreferences(Constants.GENERAL_PREFERENCES, Context.MODE_PRIVATE).getString(Constants.USERNAME,"0");
-        if(UserName.equals("0"))
-            showFragment(SignupMenuFragment.class,false);
-        else
+        if(SharedConf_hasUserManagement)
         {
-            String UserName2= getSharedPreferences(Constants.GENERAL_PREFERENCES, Context.MODE_PRIVATE).getString(Constants.USERNAME,"0");
-            String Password2= getSharedPreferences(Constants.GENERAL_PREFERENCES, Context.MODE_PRIVATE).getString(Constants.PASSWORD,"0");
-            int ROLE2= getSharedPreferences(Constants.GENERAL_PREFERENCES, Context.MODE_PRIVATE).getInt(Constants.ROLE,0);
-            String postData="username="+UserName2+"&password="+Password2+"&action=login_Click";
-            String URL=Constants.LOGIN_URL;
+            String UserName= getSharedPreferences(Constants.GENERAL_PREFERENCES, Context.MODE_PRIVATE).getString(Constants.USERNAME,"0");
+            if(UserName.equals("0"))
+                showFragment(SignupMenuFragment.class,false);
+            else
+            {
+                String UserName2= getSharedPreferences(Constants.GENERAL_PREFERENCES, Context.MODE_PRIVATE).getString(Constants.USERNAME,"0");
+                String Password2= getSharedPreferences(Constants.GENERAL_PREFERENCES, Context.MODE_PRIVATE).getString(Constants.PASSWORD,"0");
+                int ROLE2= getSharedPreferences(Constants.GENERAL_PREFERENCES, Context.MODE_PRIVATE).getInt(Constants.ROLE,0);
+                String postData="username="+UserName2+"&password="+Password2+"&action=login_Click";
+                String URL=Constants.LOGIN_URL;
 //            mainWebView.setVisibility(View.VISIBLE);
-            mainWebView.postUrl(URL,postData.getBytes());
-            mainWebView.loadUrl("about:blank");
-            routeToIndex();
+                mainWebView.postUrl(URL,postData.getBytes());
+                mainWebView.loadUrl("about:blank");
+                routeToIndex();
+            }
         }
+
     }
 
     public void routeToIndex()
@@ -218,7 +245,7 @@ public class MainActivity extends AppCompatActivity
     }
     @Override
     public void onBackPressed() {
-        if (mainWebView.canGoBack()) {
+        if (SharedConf_hasWebView && mainWebView.canGoBack()) {
             mainWebView.goBack();
         }
         else if(!FragmentCallList.empty()){
@@ -248,7 +275,8 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
         Log.d("dsdd",String.valueOf(id));
-        mainWebView.setVisibility(View.GONE);
+        if(SharedConf_hasWebView)
+            mainWebView.setVisibility(View.GONE);
         if (id == R.id.nav_buy) {
             showFragment(PurchaseFragment.class);
         } else if (id == R.id.nav_mainmenu) {

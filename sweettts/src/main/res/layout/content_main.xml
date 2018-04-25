@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="ir.sweetsoft.sweettts.MainActivity"
+    tools:showIn="@layout/app_bar_main">
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentTop="true"
+    android:id="@+id/lbltitle"
+    android:text="Title"/>
+    <EditText
+        android:id="@+id/txttitle"
+        android:layout_width="372dp"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text=""
+        android:layout_below="@id/lbltitle"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/txttitle"
+        android:id="@+id/lbltext"
+        android:text="Context"/>
+    <EditText
+        android:id="@+id/txttext"
+        android:layout_width="373dp"
+        android:layout_height="254dp"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:text=""
+        android:layout_below="@id/lbltext"
+        />
+
+    <Button
+        android:id="@+id/btnspeack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:layout_below="@id/txttext"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>
