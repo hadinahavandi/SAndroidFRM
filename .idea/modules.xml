@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/MaterialDatePicker/MaterialDatePicker.iml" filepath="$PROJECT_DIR$/MaterialDatePicker/MaterialDatePicker.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/sweetlib1/sweetlib1.iml" filepath="$PROJECT_DIR$/sweetlib1/sweetlib1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sweettts/sweettts.iml" filepath="$PROJECT_DIR$/sweettts/sweettts.iml" />
       <module fileurl="file://$PROJECT_DIR$/voicestoryshop/voicestoryshop.iml" filepath="$PROJECT_DIR$/voicestoryshop/voicestoryshop.iml" />
     </modules>
   </component>
