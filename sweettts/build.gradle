@@ -35,4 +35,12 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:0.5'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:2.2.2'
     implementation project(':sweetlib1')
+    implementation files('jaudiotagger-2.2.3.jar')
+    implementation files('args4j.jar')
+    implementation files('castor-core.jar')
+    implementation files('castor-xml.jar')
+    implementation files('commons-logging.jar')
+    implementation files('ffmpeg-java.jar')
+    implementation files('jna.jar')
+    implementation files('lizzy.jar')
 }
