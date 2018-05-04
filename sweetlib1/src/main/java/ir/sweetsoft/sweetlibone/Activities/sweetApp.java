@@ -9,12 +9,19 @@ import common.FontsOverride;
  */
 
 public class sweetApp extends Application{
+
+    public void setDefaultFontName(String defaultFontName) {
+        DefaultFontName = defaultFontName;
+    }
+
+    private String DefaultFontName="fonts/IRANSansMobile.ttf";
     @Override
     public void onCreate() {
         super.onCreate();
 
 //set Custom Typeface
 
-        FontsOverride.setDefaultFont(this, "MONOSPACE", "fonts/IRANSansMobile.ttf");
+        if(DefaultFontName!=null)
+        FontsOverride.setDefaultFont(this, "MONOSPACE", DefaultFontName);
     }
 }

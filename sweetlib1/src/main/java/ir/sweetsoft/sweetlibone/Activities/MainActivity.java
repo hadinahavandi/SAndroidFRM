@@ -76,6 +76,12 @@ public class MainActivity extends AppCompatActivity
     private boolean SharedConf_hasWebView=true;
     private boolean SharedConf_hasUserManagement=true;
     private int LayoutID=-1;
+    private NavigationView navigationView;
+
+    protected NavigationView getNavigationView() {
+        return navigationView;
+    }
+
     public void setTitleText(String Text)
     {
         titleBar.setText(Text);
@@ -158,7 +164,7 @@ public class MainActivity extends AppCompatActivity
         });
 
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         titleBar=(TextView)findViewById(R.id.pagetitle);
         Typeface face= Typeface.createFromAsset(getAssets(),"fonts/IRANSansMobile.ttf");

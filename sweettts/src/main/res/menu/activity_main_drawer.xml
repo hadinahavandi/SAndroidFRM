@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
         <item
@@ -7,6 +8,26 @@
             android:icon="@mipmap/ic_class"
             android:iconTint="#fff"
             android:title="Home"/>
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@mipmap/ic_class"
+            android:iconTint="#fff"
+            android:title="Settings"/>
+        <!--<item-->
+            <!--android:id="@+id/chkremovenewlines"-->
+            <!--android:icon="@mipmap/ic_class"-->
+            <!--android:title="single Line"-->
+            <!--app:actionViewClass="android.widget.Switch" />-->
+        <!--<item-->
+            <!--android:id="@+id/chkremoveparentheses"-->
+            <!--android:icon="@mipmap/ic_class"-->
+            <!--android:title="(####)"-->
+            <!--app:actionViewClass="android.widget.Switch" />-->
+        <!--<item-->
+            <!--android:id="@+id/chkremoveparentheseswithnumbers"-->
+            <!--android:icon="@mipmap/ic_class"-->
+            <!--android:title="(#2018#)"-->
+            <!--app:actionViewClass="android.widget.Switch" />-->
         <item
             android:id="@+id/nav_buy"
             android:icon="@mipmap/ic_buy"
@@ -34,6 +55,7 @@
             android:icon="@mipmap/ic_contactus"
             android:title="خروج از حساب"
             android:visible="false" />
+
     </group>
 
 

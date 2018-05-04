@@ -2,17 +2,21 @@ package ir.sweetsoft.sweettts;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
+import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
+import android.speech.tts.Voice;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +30,7 @@ import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagOptionSingleton;
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -35,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import christophedelory.playlist.Playlist;
 import christophedelory.playlist.SpecificPlaylist;
@@ -44,6 +50,8 @@ public class TTSFragment extends Fragment implements TextToSpeech.OnInitListener
 
     private TextToSpeech tts;
     private Button btnSpeak;
+    private Button btnSave;
+    private Button btnClear;
     private String LastFolderPath="";
     private List<String> LastFilesList= new ArrayList<>();
     private String LastString="";
@@ -51,6 +59,9 @@ public class TTSFragment extends Fragment implements TextToSpeech.OnInitListener
     private String LastUtteranceId="";
     private int SavedFileCount=0;
     private int FailedFileCount=0;
+    private boolean LastJobIsFile=true;
+    private Voice DefaultVoice=null;
+
     private EditText txtText,txtTitle;
 
     private OnFragmentInteractionListener mListener;
@@ -76,14 +87,33 @@ public class TTSFragment extends Fragment implements TextToSpeech.OnInitListener
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        int font_size=Integer.parseInt(prefs.getString("font_size", "10"));
         tts = new TextToSpeech(getActivity(), this);
-        btnSpeak=getActivity().findViewById(ir.sweetsoft.sweettts.R.id.btnspeack);
+        btnSpeak=getActivity().findViewById(R.id.btnspeak);
+        btnSave=getActivity().findViewById(R.id.btnsave);
+        btnClear=getActivity().findViewById(R.id.btn_clear);
         txtText =  getActivity().findViewById(ir.sweetsoft.sweettts.R.id.txttext);
+        txtText.setTextSize(TypedValue.COMPLEX_UNIT_SP,font_size);
         txtTitle = getActivity().findViewById(ir.sweetsoft.sweettts.R.id.txttitle);
+        txtTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP,font_size+1);
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                speakAll(true);
+            }
+        });
+        btnClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txtText.setText("");
+                txtTitle.setText("");
+            }
+        });
         btnSpeak.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                speakAll();
+                speakAll(false);
             }
         });
 
@@ -121,16 +151,11 @@ public class TTSFragment extends Fragment implements TextToSpeech.OnInitListener
 //            share(i);
 //        }
 //    }
-    private int getStandardPartition(String text,int StartIndex)
+    private int getStandardPartition(String text,int StartIndex,int PageSize)
     {
-
-        int charindex=StartIndex;
-        for(int index=0;index<15;index++)
-        {
-            int tmpcharindex= text.indexOf(".",charindex+1);
-            if(tmpcharindex>=0)
-                charindex=tmpcharindex;
-        }
+        int charindex= text.indexOf(".",StartIndex+PageSize+1);
+        if(charindex==-1)
+            return text.length();
         return charindex;
     }
     private String getTime()
@@ -143,8 +168,27 @@ public class TTSFragment extends Fragment implements TextToSpeech.OnInitListener
 
         return date;
     }
-    private void speakAll()
+    private void speakAll(boolean saveFile)
     {
+
+        LastJobIsFile=saveFile;
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        int page_size=Integer.parseInt(prefs.getString("page_size", "2000"));
+        boolean SingleLine=prefs.getBoolean("single_line_mode", false);
+        boolean remove_all_parenthesis=prefs.getBoolean("remove_all_parenthesis", false);
+        boolean remove_year_parenthesis=prefs.getBoolean("remove_year_parenthesis", false);
+        String VoiceName=prefs.getString("default_voice", "");
+        Set<Voice> voices=tts.getVoices();
+        for(Voice voice:voices)
+        {
+            if(voice.getName().equals(VoiceName)) {
+                DefaultVoice = voice;
+                Log.d("Found", VoiceName);
+            }
+        }
+        if(DefaultVoice!=null)
+            tts.setVoice(DefaultVoice);
+
         LastFilesList=new ArrayList<>();
         String text = txtText.getText().toString();
         String title=txtTitle.getText().toString();
@@ -153,61 +197,79 @@ public class TTSFragment extends Fragment implements TextToSpeech.OnInitListener
         LastString=title+"\r\n"+text;
         LastTitle=title;
         text=text.replace("-\r\n","");
-        text=text.replace("\n"," ");
-        text=text.replace("\r","");
-//        text=text.replace("-","");
+        if(SingleLine)
+        {
+            text=text.replace("\r\n\r\n",".");
+            text=text.replace("\n"," ");
+            text=text.replace("\r","");
+        }
         text = text.replaceAll("\\[.*?]", " [ one of references ] ");
+        if(remove_all_parenthesis)
+            text = text.replaceAll("\\(.*?\\)", " (one of notes) ");
+        if(remove_year_parenthesis)
+            text = text.replaceAll("\\(.*\\d{4}?\\)", " (one of references) ");
+        txtText.setText(text);
         int StartIndex=0;
         int LastIndex=-1;
         int ContextIndex=0;
+        if(!saveFile)
+        {
+            updateProgress();
+            btnSpeak.setEnabled(false);
+            btnSave.setEnabled(false);
+            speakOut(text);
+        }
+        else
+        {
+            do{
 
-        do{
+                ContextIndex++;
+                if(StartIndex!=0)
+                    LastIndex=StartIndex;
+                StartIndex=getStandardPartition(text,StartIndex,page_size);
+                Log.d("Index",StartIndex+" ");
 
-            ContextIndex++;
-            if(StartIndex!=0)
-                LastIndex=StartIndex;
-            StartIndex=getStandardPartition(text,StartIndex);
-            Log.d("Index",StartIndex+" ");
-
-            if((LastIndex!=StartIndex && LastIndex>=-1 && StartIndex>0)||(ContextIndex==1 && StartIndex==0))
-            {
-                String StandardText=text;
-//                Log.d("SS",StartIndex+":"+LastIndex);
-                boolean isLastPart=false;
-                if(StartIndex>0)
+                if((LastIndex!=StartIndex && LastIndex>=-1 && StartIndex>0)||(ContextIndex==1 && StartIndex==0))
                 {
-                    if(text.indexOf(".",StartIndex+1)<0) {
-                        StandardText = text.substring(LastIndex + 1);
-                        isLastPart=true;
+                    String StandardText=text;
+                    boolean isLastPart=false;
+                    if(StartIndex>0)
+                    {
+                        if(text.indexOf(".",StartIndex+1)<0) {
+                            StandardText = text.substring(LastIndex + 1);
+                            isLastPart=true;
+                        }
+                        else
+                            StandardText=text.substring(LastIndex+1,StartIndex+1);
+                    }
+                    String NewText="Start Of the document";
+                    if(ContextIndex!=1)
+                    {
+                        NewText+="\r\nPart "+ContextIndex;
+                        if(isLastPart)
+                            NewText+="(this is the last part)";
                     }
                     else
-                        StandardText=text.substring(LastIndex+1,StartIndex+1);
-                }
-                String NewText="<<Start Of the document>>";
-                if(ContextIndex!=1)
-                {
-                    NewText+="\r\nPart "+ContextIndex;
+                    {
+                        NewText+="\r\nTitle: "+title.replace(":","-");
+                        NewText+="\r\nCreation Time: "+getTime();
+                        NewText+="\r\nFirst Part";
+                    }
+                    NewText+="\r\n"+StandardText;
+                    NewText+="\r\nEnd of the document";
                     if(isLastPart)
-                        NewText+="(this is the last part)";
-                }
-                else
-                {
-                    NewText+="\r\nTitle: "+title.replace(":","-");
-                    NewText+="\r\nCreation Time: "+getTime();
-                    NewText+="\r\nFirst Part";
-                }
-                NewText+="\r\n"+StandardText;
-                NewText+="\r\n<<End of the document>>";
-                if(isLastPart)
-                    NewText+="\r\nthis file is made with sweet text to speech app.\r\nfor more information please visit our website:\r\nwww.sweetsoft.ir\r\n";
+                        NewText+="\r\nthis file is made with sweet text to speech app.\r\nfor more information please visit our website:\r\nwww.sweetsoft.ir\r\n";
 //                intentMessageTelegram(NewText);
-                speakOut(title.replace(":","-")+"/",title.replace(":","-")+ContextIndex,NewText);
+                    Save(title.replace(":","-")+"/",title.replace(":","-")+ContextIndex,NewText);
 
-            }
-        }while (StartIndex>0 && StartIndex<text.length() && LastIndex<StartIndex );
-        updateProgress();
+                }
+            }while (StartIndex>0 && StartIndex<text.length() && LastIndex<StartIndex );
+            updateProgress();
 
-        btnSpeak.setEnabled(false);
+            btnSpeak.setEnabled(false);
+            btnSave.setEnabled(false);
+        }
+
     }
     private void updateProgress()
     {
@@ -215,11 +277,14 @@ public class TTSFragment extends Fragment implements TextToSpeech.OnInitListener
             @Override
             public void run() {
 
-                btnSpeak.setText("Saving("+SavedFileCount+"/"+LastFilesList.size()+")");
+                if(LastJobIsFile)
+                    btnSave.setText("Saving("+SavedFileCount+"/"+LastFilesList.size()+")");
+                else
+                    btnSpeak.setText("Speaking");
             }
         });
     }
-    private void speakOut(String DirectoryName,String FileName,String Text) {
+    private void Save(String DirectoryName,String FileName,String Text) {
 
         LastFolderPath=Environment.getExternalStorageDirectory().getAbsolutePath()+"/SweetTTS/"+DirectoryName;
         LastUtteranceId=this.hashCode() +DirectoryName +FileName;
@@ -231,60 +296,46 @@ public class TTSFragment extends Fragment implements TextToSpeech.OnInitListener
         LastFilesList.add(FileName);
         File theFile=new File(FilePath);
         Bundle bundle=new Bundle();
-        tts.setSpeechRate(0.83f);
+//        tts.setSpeechRate(0.83f);
         tts.synthesizeToFile(Text, bundle, theFile, LastUtteranceId);
         writeToFile(LastFolderPath,FileName+".txt",Text,getActivity().getApplicationContext());
 
         Toast.makeText(getActivity(),"File Generation Started!",Toast.LENGTH_LONG).show();
+    }
+    private void speakOut(String Text) {
+
+        LastUtteranceId=this.hashCode()+"TTS";
+//        tts.setSpeechRate(0.83f);
+        tts.speak(Text,TextToSpeech.QUEUE_FLUSH,new Bundle(),LastUtteranceId);
     }
     public void onUtteranceCompleted(String utteranceId) {
         Log.i("Completed!", utteranceId); //utteranceId == "SOME MESSAGE"
 
         try
         {
-//            intentMessageTelegram();
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     enableSaveButton();
-                    Toast.makeText(getActivity(),"File Generation Completed!",Toast.LENGTH_LONG).show();
+//                    if(LastJobIsFile)
+//                        Toast.makeText(getActivity(),"File Generation Completed!",Toast.LENGTH_LONG).show();
+//                    else
+//                        Toast.makeText(getActivity(),"Speaking Completed!",Toast.LENGTH_LONG).show();
                 }
             });
-            openFolder(LastFolderPath);
-
-
-//            File file = new File(LastFolderPath+"playlist.asx");
-//            SpecificPlaylist specificPlaylist = SpecificPlaylistFactory.getInstance().readFrom(file);
-//            Playlist genericPlaylist = specificPlaylist.toPlaylist();
-//            for(int i=0;i<LastFilesList.size();i++)
-//            {
-//
-//            }
-//            for(int i=0;i<LastFilesList.size();i++)
-//            {
-//
-//                TagOptionSingleton.getInstance().setAndroid(true);
-//                Log.d("Folder:",LastFolderPath);
-//                File tempFile = new File(LastFolderPath, LastFilesList.get(i) + ".mp3");
-//                AudioFile audioFile = AudioFileIO.read(tempFile);
-//                Tag tag = audioFile.getTag();
-//                tag.setField(FieldKey.ARTIST, "SweetTTS"); // when i open music app the artist is "unknown"
-//                tag.setField(FieldKey.ALBUM_ARTIST, "SweetSoft"); // when i open music app the artist is "unknown"
-//                tag.setField(FieldKey.ALBUM, LastTitle); // when i open music app the artist is "unknown"
-//                tag.setField(FieldKey.TITLE, LastTitle); // when i open music app the artist is "unknown"
-//                tag.setField(FieldKey.COMMENT, "This file is made with SweetTTS android app,for more info visit www.sweetsoft.ir"); // when i open music app the artist is "unknown"
-//                audioFile.setTag(tag); // even without this i'm getting the same result
-//                audioFile.commit();
-//                AudioFileIO.write(audioFile);
-//            }
+            if(LastJobIsFile)
+                openFolder(LastFolderPath);
         }catch (Exception ex){ex.printStackTrace();}
 
     }
     private void enableSaveButton()
     {
 
-        btnSpeak.setText("Save");
+        btnSpeak.setText("Speak");
         btnSpeak.setEnabled(true);
+
+        btnSave.setText("Save");
+        btnSave.setEnabled(true);
     }
     public void openFolder(String Path)
     {
@@ -293,22 +344,6 @@ public class TTSFragment extends Fragment implements TextToSpeech.OnInitListener
         intent.setDataAndType(selectedUri, "resource/folder");
 
         startActivity(intent);
-//        if (intent.resolveActivityInfo(getActivity().getPackageManager(), 0) != null)
-//        {
-////            startActivity(intent);
-//        }
-//        else
-//        {
-//            // if you reach this place, it means there is no any file
-//            // explorer app installed on your device
-//        }
-//        File file = new File(Path);
-//
-////        Log.d("path", file.toString());
-//
-//        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-//        intent.setDataAndType(Uri.fromFile(file), "*/*");
-//        startActivity(intent);
     }
     private void writeToFile(String FilePath,String FileName,String data,Context context) {
         final File file = new File(FilePath, FileName);
@@ -337,6 +372,26 @@ public class TTSFragment extends Fragment implements TextToSpeech.OnInitListener
         if (status == TextToSpeech.SUCCESS) {
 
             int result = tts.setLanguage(Locale.US);
+//            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+//            String VoiceName=prefs.getString("default_voice", "");
+//            Log.d("DefaultVoice",VoiceName);
+            Set<Voice> voices=tts.getVoices();
+            List<Voice> VoiceList=new ArrayList<>();
+            for(Voice voice:voices)
+            {
+//                Log.d("Locale:",voice.getLocale().getCountry()+"-"+voice.getLocale().getDisplayLanguage()+"-"+voice.getLocale().getISO3Language()+"-"+voice.getLocale().getISO3Country());
+                if(voice.getLocale().getISO3Language().toLowerCase().equals("eng") && (voice.getLocale().getISO3Country().toLowerCase().equals("usa") || voice.getLocale().getISO3Country().toLowerCase().equals("gbr")))
+                    VoiceList.add(voice);
+//                if(voice.getName().equals(VoiceName)) {
+//                    DefaultVoice = voice;
+//
+//                    Log.d("Found", VoiceName);
+//                }
+            }
+            ((MainActivity)getActivity()).setVoiceList(VoiceList);
+
+//            if(DefaultVoice!=null)
+//                tts.setVoice(DefaultVoice);
 
             if (result == TextToSpeech.LANG_MISSING_DATA
                     || result == TextToSpeech.LANG_NOT_SUPPORTED) {
@@ -363,7 +418,10 @@ public class TTSFragment extends Fragment implements TextToSpeech.OnInitListener
                                 @Override
                                 public void run() {
                                     enableSaveButton();
-                                    Toast.makeText(getActivity(),"File Generation Failed!",Toast.LENGTH_LONG).show();
+                                    if(LastJobIsFile)
+                                        Toast.makeText(getActivity(),"File Generation Failed!",Toast.LENGTH_LONG).show();
+                                    else
+                                        Toast.makeText(getActivity(),"Speaking Failed!",Toast.LENGTH_LONG).show();
                                 }
                             });
                         }catch (Exception ex){
@@ -376,7 +434,6 @@ public class TTSFragment extends Fragment implements TextToSpeech.OnInitListener
                     {
                     }
                 });
-//                speakOut();
             }
 
         } else {
