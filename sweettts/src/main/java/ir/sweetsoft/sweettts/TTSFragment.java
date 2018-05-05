@@ -197,17 +197,23 @@ public class TTSFragment extends Fragment implements TextToSpeech.OnInitListener
         LastString=title+"\r\n"+text;
         LastTitle=title;
         text=text.replace("-\r\n","");
+        text=text.replace("-\n","");
+        text=text.replace("-\r","");
         if(SingleLine)
         {
             text=text.replace("\r\n\r\n",".");
+            text=text.replace("\n\n",".");
+            text=text.replace("\r\r",".");
+
+            text=text.replace("\r\n"," ");
             text=text.replace("\n"," ");
-            text=text.replace("\r","");
+            text=text.replace("\r"," ");
         }
-        text = text.replaceAll("\\[.*?]", " [ one of references ] ");
+        text = text.replaceAll("\\[[^\\[\\]]*\\]", " [ one of references ] ");
         if(remove_all_parenthesis)
-            text = text.replaceAll("\\(.*?\\)", " (one of notes) ");
+            text = text.replaceAll("\\([^\\(\\)]*\\)", " (one of notes) ");
         if(remove_year_parenthesis)
-            text = text.replaceAll("\\(.*\\d{4}?\\)", " (one of references) ");
+            text = text.replaceAll("\\([^\\(\\)]*\\d{4}[^\\(\\)]*\\)", " (one of references) ");
         txtText.setText(text);
         int StartIndex=0;
         int LastIndex=-1;
@@ -227,7 +233,7 @@ public class TTSFragment extends Fragment implements TextToSpeech.OnInitListener
                 if(StartIndex!=0)
                     LastIndex=StartIndex;
                 StartIndex=getStandardPartition(text,StartIndex,page_size);
-                Log.d("Index",StartIndex+" ");
+//                Log.d("Index",StartIndex+" ");
 
                 if((LastIndex!=StartIndex && LastIndex>=-1 && StartIndex>0)||(ContextIndex==1 && StartIndex==0))
                 {
