@@ -394,7 +394,8 @@ public class TTSFragment extends Fragment implements TextToSpeech.OnInitListener
 //                    Log.d("Found", VoiceName);
 //                }
             }
-            ((MainActivity)getActivity()).setVoiceList(VoiceList);
+            if(getActivity()!=null)
+                ((MainActivity)getActivity()).setVoiceList(VoiceList);
 
 //            if(DefaultVoice!=null)
 //                tts.setVoice(DefaultVoice);
