@@ -30,7 +30,10 @@ public class RemoteClass {
     {
         setActivity(activity);
     }
-
+    public RemoteClass()
+    {
+        super();
+    }
     public JsonReader getReader(String PageURL,boolean isPostMethod,String Data) throws IOException {
         URL httpbinEndpoint = null;
         try {

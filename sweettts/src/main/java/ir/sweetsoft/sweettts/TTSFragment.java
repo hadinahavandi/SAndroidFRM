@@ -87,7 +87,8 @@ public class TTSFragment extends Fragment implements TextToSpeech.OnInitListener
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        MainActivity theActivity=(MainActivity) getActivity();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(theActivity);
         int font_size=Integer.parseInt(prefs.getString("font_size", "10"));
         tts = new TextToSpeech(getActivity(), this);
         btnSpeak=getActivity().findViewById(R.id.btnspeak);
@@ -110,6 +111,11 @@ public class TTSFragment extends Fragment implements TextToSpeech.OnInitListener
                 txtTitle.setText("");
             }
         });
+        if(theActivity.SharedContext!=null)
+        {
+            txtTitle.setText(theActivity.SharedContext.title);
+            txtText.setText(theActivity.SharedContext.context);
+        }
         btnSpeak.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

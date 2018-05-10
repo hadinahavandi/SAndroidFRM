@@ -18,11 +18,17 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
+<ImageView
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    android:src="@drawable/sweetlogo"
+    android:layout_centerHorizontal="true"
+    android:id="@+id/sweetlogo"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/lbl_title"
+                android:layout_below="@id/sweetlogo"
                 android:layout_gravity="center"
                 android:textAlignment="center"
                 android:text="Developed By:" />
@@ -34,7 +40,7 @@
                 android:layout_below="@id/lbl_title"
                 android:textAlignment="center"
                 android:textDirection="rtl"
-                android:text="Hadi AmirNahavandi-Sweet Software Group" />
+                android:text="Sweet Software Group" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

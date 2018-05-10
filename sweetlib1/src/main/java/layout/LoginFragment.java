@@ -109,7 +109,7 @@ public class LoginFragment extends Fragment {
     public void CheckLogin(String UserName,String Password)
     {
         try {
-            String DeviceID= SweetDeviceManager.getDeviceID(this.getActivity().getApplicationContext());
+            String DeviceID= SweetDeviceManager.getDeviceID(this.getActivity());
             String URL=Constants.SIGNINURL+"&username="+ URLEncoder.encode(UserName,"utf-8")+"&password="+URLEncoder.encode(Password,"utf-8")+"&deviceid="+URLEncoder.encode(DeviceID,"utf-8");
             Log.d("URL",URL);
             Request request = Bridge.get(URL).throwIfNotSuccess().retries(5, 6000).request();
@@ -119,10 +119,8 @@ public class LoginFragment extends Fragment {
             if (response.isSuccess()) {
                 Status=Integer.parseInt(response.asAsonObject().get("status").toString());
             }
-            Log.d("DdD","SSSSSSSSSSSSSSSSSSSSSSSS");
             if(Status==404)//NotFound
             {
-                Log.d("DD","SSSSSSSSSSSSSSSSSSSSSSSS");
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

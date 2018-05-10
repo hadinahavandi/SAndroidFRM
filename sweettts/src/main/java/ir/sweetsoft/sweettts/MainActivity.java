@@ -20,12 +20,15 @@ import layout.AboutDeveloperFragment;
 import layout.AboutUsFragment;
 import layout.PurchaseFragment;
 import layout.SignupMenuFragment;
+import tts.Context;
+import tts.ContextFragment;
 
 public class MainActivity extends ir.sweetsoft.sweetlibone.Activities.MainActivity
         implements NavigationView.OnNavigationItemSelectedListener  {
 
     private List<Voice> VoiceList;
 
+    public Context SharedContext;
     protected void setVoiceList(List<Voice> voiceList) {
         VoiceList = voiceList;
     }
@@ -60,6 +63,9 @@ public class MainActivity extends ir.sweetsoft.sweetlibone.Activities.MainActivi
             intent.putExtra("voicevalues", VoiceListArray);
             intent.putExtra("voicetitles", VoiceTitleListArray);
             startActivity(intent);
+        }
+        else if (id == ir.sweetsoft.sweettts.R.id.nav_contextlist) {
+            showFragment(ContextFragment.class);
         }
         else if (id == ir.sweetsoft.sweetlibone.R.id.nav_aboutdeveloper) {
             showFragment(AboutDeveloperFragment.class);
