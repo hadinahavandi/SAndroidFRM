@@ -42,7 +42,8 @@ public class DoctorRecyclerViewAdapter extends RecyclerView.Adapter<DoctorRecycl
 			holder.Family.setText(String.valueOf(mValues.get(position).getFamily()));
 //			holder.Education.setText(String.valueOf(mValues.get(position).getEducation()));
 			holder.Matabaddress.setText(String.valueOf(mValues.get(position).getMatabaddress()));
-		Picasso.with(theActivity.getApplicationContext()).load(Constants.SITEURL+String.valueOf(mValues.get(position).getPhoto_flu())).into(holder.Photo_flu);
+		if(String.valueOf(mValues.get(position).getPhoto_flu()).trim().length()>3)
+			Picasso.with(theActivity.getApplicationContext()).load(Constants.SITEURL+String.valueOf(mValues.get(position).getPhoto_flu())).into(holder.Photo_flu);
 		}
 	@Override
 		public int getItemCount() {

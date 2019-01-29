@@ -5,17 +5,17 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_mainmenu"
-            android:icon="@mipmap/ic_class"
+            android:icon="@drawable/home"
             android:iconTint="#fff"
             android:title="Home"/>
         <item
             android:id="@+id/nav_contextlist"
-            android:icon="@mipmap/ic_class"
+            android:icon="@drawable/baseline_list_alt_black_18"
             android:iconTint="#fff"
             android:title="Context List"/>
         <item
             android:id="@+id/nav_settings"
-            android:icon="@mipmap/ic_class"
+            android:icon="@drawable/baseline_settings_black_18"
             android:iconTint="#fff"
             android:title="Settings"/>
         <!--<item-->
@@ -53,7 +53,7 @@
             android:visible="false" />
         <item
             android:id="@+id/nav_aboutdeveloper"
-            android:icon="@mipmap/ic_contactus"
+            android:icon="@drawable/baseline_contact_mail_black_18"
             android:title="About..." />
         <item
             android:id="@+id/nav_logout"

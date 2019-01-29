@@ -108,7 +108,8 @@ public class PurchaseFragment extends Fragment {
                 if (TheURL.contains("finance/epayment.jsp") && !TheURL.contains("?id"))
                 {
                     myWebView.setVisibility(View.GONE);
-                    thePurchaseCompleteListener.OnPurchaseComplete();
+                    if(thePurchaseCompleteListener!=null)
+                        thePurchaseCompleteListener.OnPurchaseComplete();
 //                    code = url.substring(url.lastIndexOf("value=") + 6);
 //                    dialog.dismiss(); //action
                 }

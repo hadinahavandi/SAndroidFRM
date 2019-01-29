@@ -75,6 +75,12 @@ public class MainActivity extends AppCompatActivity
     public WebView mainWebView;
     private boolean SharedConf_hasWebView=true;
     private boolean SharedConf_hasUserManagement=true;
+
+    public void setSharedConf_hasCustomActionBar(boolean sharedConf_hasCustomActionBar) {
+        SharedConf_hasCustomActionBar = sharedConf_hasCustomActionBar;
+    }
+
+    private boolean SharedConf_hasCustomActionBar=true;
     private int LayoutID=-1;
     private NavigationView navigationView;
 
@@ -166,16 +172,21 @@ public class MainActivity extends AppCompatActivity
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        titleBar=(TextView)findViewById(R.id.pagetitle);
         Typeface face= Typeface.createFromAsset(getAssets(),"fonts/IRANSansMobile.ttf");
-        titleBar.setTypeface(face);
-        ImageView imgmenu=(ImageView)findViewById(R.id.imgmenu);
-        imgmenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                drawer.openDrawer(navigationView);
-            }
-        });
+        if(SharedConf_hasCustomActionBar)
+        {
+
+            titleBar=(TextView)findViewById(R.id.pagetitle);
+            titleBar.setTypeface(face);
+            ImageView imgmenu=(ImageView)findViewById(R.id.imgmenu);
+            imgmenu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    drawer.openDrawer(navigationView);
+                }
+            });
+        }
+
         TextView settingstitle=(TextView)navigationView.getHeaderView(0).findViewById(R.id.settingstitle);
         settingstitle.setTypeface(face);
         if(SharedConf_hasUserManagement)
@@ -203,6 +214,7 @@ public class MainActivity extends AppCompatActivity
     {
         String UserName= getSharedPreferences(Constants.GENERAL_PREFERENCES, Context.MODE_PRIVATE).getString(Constants.USERNAME,"0");
         String Password= getSharedPreferences(Constants.GENERAL_PREFERENCES, Context.MODE_PRIVATE).getString(Constants.PASSWORD,"0");
+        Log.d("Route","Routing to Index");
         int ROLE= getSharedPreferences(Constants.GENERAL_PREFERENCES, Context.MODE_PRIVATE).getInt(Constants.ROLE,0);
         if(ROLE==3)
             showFragment(DoctorMenuFragment.class);

@@ -7,7 +7,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
+        android:visibility="gone"
         android:layout_alignParentTop="true"
         android:scaleType="centerCrop"
         android:id="@+id/pagebg"/>
@@ -23,6 +23,7 @@
         android:textColor="#fff"
         android:textAlignment="center"
         android:gravity="center"
+        android:visibility="gone"
         android:text="موبایل" />
 
     <EditText
@@ -32,11 +33,11 @@
         android:layout_alignStart="@+id/txtusername"
         android:layout_below="@+id/lblmobile"
         android:ems="10"
-        android:inputType="number"
-        android:textColor="#fff"
-        android:textAlignment="center"
         android:gravity="center"
-        android:maxLength="11" />
+        android:hint="موبایل"
+        android:inputType="number"
+        android:maxLength="11"
+        android:textAlignment="center" />
 
     <TextView
         android:id="@+id/lblname"
@@ -47,6 +48,7 @@
         android:textColor="#fff"
         android:textAlignment="center"
         android:gravity="center"
+        android:visibility="gone"
         android:text="نام و نام خانوادگی" />
     <EditText
         android:id="@+id/txtname"
@@ -56,9 +58,9 @@
         android:layout_below="@+id/lblname"
         android:ems="10"
         android:inputType="textCapCharacters"
-        android:textColor="#fff"
         android:textAlignment="center"
         android:gravity="center"
+        android:hint="نام و نام خانوادگی"
         android:maxLength="25"/>
     <TextView
         android:id="@+id/lblusername"
@@ -69,6 +71,7 @@
         android:textColor="#fff"
         android:textAlignment="center"
         android:gravity="center"
+        android:visibility="gone"
         android:text="نام کاربری" />
     <EditText
         android:id="@+id/txtusername"
@@ -78,9 +81,9 @@
         android:layout_below="@+id/lblusername"
         android:ems="10"
         android:inputType="textCapCharacters"
-        android:textColor="#fff"
         android:textAlignment="center"
         android:gravity="center"
+        android:hint="نام کاربری"
         android:maxLength="25" />
 
     <TextView
@@ -92,6 +95,7 @@
         android:textColor="#fff"
         android:textAlignment="center"
         android:gravity="center"
+        android:visibility="gone"
         android:text="کلمه عبور" />
     <EditText
         android:id="@+id/txtpassword"
@@ -101,9 +105,9 @@
         android:layout_below="@+id/lblpassword"
         android:ems="10"
         android:inputType="textWebPassword"
-        android:textColor="#fff"
         android:textAlignment="center"
         android:gravity="center"
+        android:hint="کلمه عبور"
         android:maxLength="10" />
 
     <TextView
@@ -115,6 +119,7 @@
         android:textColor="#fff"
         android:textAlignment="center"
         android:gravity="center"
+        android:visibility="gone"
         android:text="تکرار کلمه عبور" />
     <EditText
         android:id="@+id/txtpassword2"
@@ -124,9 +129,9 @@
         android:ems="10"
         android:inputType="textWebPassword"
         android:layout_below="@+id/lblpassword2"
-        android:textColor="#fff"
         android:textAlignment="center"
         android:gravity="center"
+        android:hint="تکرار کلمه عبور"
         android:maxLength="10" />
 
     <Button
@@ -135,7 +140,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtpassword2"
         android:layout_centerHorizontal="true"
-        android:text="عضویت" />
+        android:background="@android:color/holo_blue_dark"
+        android:text="عضویت"
+        android:textColor="@android:color/background_light" />
 
     <ProgressBar
         android:layout_width="wrap_content"

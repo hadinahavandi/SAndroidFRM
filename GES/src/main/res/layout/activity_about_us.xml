@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AboutUsActivity"
+    android:background="@color/colorPrimary">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentTop="true"
+            android:id="@+id/logobar"
+            android:layout_centerHorizontal="true">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/logo1"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/btn_sweetsoft"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/logo2"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/btn_adg"
+                />
+        </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/logobar"
+        android:gravity="center"
+        android:textColor="#ffffff"
+        android:text="Developed by Hadi Nahavandi - Sweet Software Group"
+        android:id="@+id/developer"
+        android:layout_marginTop="10dp"
+        android:textSize="16sp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="www.anhd.ir - www.sweetsoft.ir"
+        android:id="@+id/sites"
+        android:layout_below="@id/developer"
+        android:textStyle="bold"
+        android:textColor="#ffffff"
+        android:layout_marginTop="10dp"
+        android:textSize="16sp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:id="@+id/copyright"
+        android:layout_below="@id/sites"
+        android:textColor="#ffffff"
+        android:layout_marginTop="10dp"
+        android:text="All rights reserved for Arian Delta Gene Co."
+        android:textSize="16sp"
+        />
+    </RelativeLayout>
+</RelativeLayout>

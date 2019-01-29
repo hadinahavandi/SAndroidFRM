@@ -1,10 +1,14 @@
 package ocms;
+import android.app.DownloadManager;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -15,17 +19,29 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import com.makeramen.roundedimageview.RoundedImageView;
+import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.mojtaba.materialdatetimepicker.utils.PersianCalendar;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
+import com.yarolegovich.lovelydialog.LovelyProgressDialog;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.jzvd.JZVideoPlayerStandard;
 import common.SweetDisplayScaler;
 import ir.blue_saffron.persianmaterialdatetimepicker.date.DatePickerDialog;
 import ir.sweetsoft.sweetlibone.Activities.Constants;
@@ -56,7 +72,10 @@ public class DoctorItemFragment extends Fragment {
     private TextView lbl_MatabaddressCaption;
     private ImageView lbl_Photo_fluContent;
     private Button btnReserve;
-
+    private int PHOTO_ROW_SIZE=3;
+    cn.jzvd.JZVideoPlayerStandard vv;
+    private LovelyProgressDialog pDialog;
+    ProgressBar WaitBar;
     public DoctorItemFragment() {
     }
 
@@ -64,6 +83,8 @@ public class DoctorItemFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Typeface face = Typeface.createFromAsset(getActivity().getAssets(), "fonts/IRANSansMobile.ttf");
+
+        WaitBar=getActivity().findViewById(R.id.progressbar);
         btnReserve=getActivity().findViewById(R.id.btn_reserve);
         lbl_NameContent =  getActivity().findViewById(R.id.lbl_name_content);
         lbl_FamilyContent =  getActivity().findViewById(R.id.lbl_family_content);
@@ -102,6 +123,9 @@ public class DoctorItemFragment extends Fragment {
         lbl_MatabtelCaption.setTypeface(face);
         lbl_MatabaddressContent.setTypeface(face);
         lbl_MatabaddressCaption.setTypeface(face);
+        btnReserve.setTypeface(face);
+        SweetDisplayScaler scaler=new SweetDisplayScaler(getActivity());
+        lbl_Photo_fluContent.getLayoutParams().height=scaler.HeightPercentToPixel(50);
 //        lbl_Photo_fluContent.setTypeface(face);
         AsyncTask.execute(new Runnable() {
             @Override
@@ -120,73 +144,141 @@ public class DoctorItemFragment extends Fragment {
         });
     }
 
+    private int getFileType(String FilePath)
+    {
+        if(FilePath.indexOf('.')<0)
+            return 3;
+        String Format=FilePath.substring(FilePath.indexOf('.')).trim().toLowerCase();
+        if(Format.equals(".jpg") || Format.equals(".png") || Format.equals(".tiff") || Format.equals(".jpeg") || Format.equals(".gif"))
+            return 1;//Image
+        else if(Format.equals(".mkv") || Format.equals(".mp4") || Format.equals(".3gp") || Format.equals(".avi") || Format.equals(".mpeg") || Format.equals(".mpg"))
+            return 2;//video
+        else
+            return 3;
+    }
     private void ReloadData() {
-        SweetDisplayScaler scaler=new SweetDisplayScaler(getActivity());
-        LinearLayout LastLL=null;
+        final SweetDisplayScaler scaler=new SweetDisplayScaler(getActivity());
+
+        vv=getActivity().findViewById(R.id.filevideo);
+        vv.getLayoutParams().height=scaler.HeightPercentToPixel(40);
+
+        RelativeLayout MainLayout=getActivity().findViewById(R.id.mainlayout);
+        MainLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(vv!=null && vv.getVisibility()==View.VISIBLE)
+                {
+                    vv.release();
+                    vv.setVisibility(View.GONE);
+                }
+            }
+        });
+        RelativeLayout LastLL=null;
+        RelativeLayout LastRowLL=null;
+        final Transformation transformation = new RoundedTransformationBuilder()
+                .borderColor(Color.parseColor("#ff0099cc"))
+                .borderWidthDp(3)
+                .cornerRadiusDp(20)
+                .oval(false)
+                .build();
+        long LastViewID=-1;
         for(int i=0;i<theDoctorFiles.size();i++)
         {
             Log.d("DoctorFileID",String.valueOf(theDoctorFiles.get(i).getId()));
-            LinearLayout ll=new LinearLayout(getActivity());
-            ll.setOrientation(LinearLayout.HORIZONTAL);
-            ll.setGravity(Gravity.RIGHT);
+            RelativeLayout ll=new RelativeLayout(getActivity());
+//            ll.setOrientation(LinearLayout.HORIZONTAL);
+//            ll.setGravity(Gravity.RIGHT);
             ll.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
             ImageView imgFile=new ImageView(getActivity());
             imgFile.setImageResource(R.drawable.server);
+            imgFile.setScaleType(ImageView.ScaleType.CENTER_CROP);
             TextView tvTitle=new TextView(getActivity());
             tvTitle.setText(theDoctorFiles.get(i).getDescription());
 
             Typeface face = Typeface.createFromAsset(getActivity().getAssets(), "fonts/IRANSansMobile.ttf");
             tvTitle.setTypeface(face);
+            imgFile.setId(View.generateViewId());
             ll.addView(imgFile);
-            LinearLayout.LayoutParams imgLP= (LinearLayout.LayoutParams) imgFile.getLayoutParams();
-            imgLP.width=scaler.WidthPercentToPixel(10);
-            imgLP.height=scaler.WidthPercentToPixel(10);
+
+            tvTitle.setVisibility(View.GONE);
+            RelativeLayout.LayoutParams imgLP= (RelativeLayout.LayoutParams) imgFile.getLayoutParams();
+            imgLP.width=scaler.WidthPercentToPixel(30);
+            imgLP.height=scaler.WidthPercentToPixel(30);
             ll.addView(tvTitle);
-            RelativeLayout MainLayout=getActivity().findViewById(R.id.mainlayout);
+            RelativeLayout.LayoutParams TitleParams= (RelativeLayout.LayoutParams) tvTitle.getLayoutParams();
+            TitleParams.addRule(RelativeLayout.BELOW,imgFile.getId());
+
+
+
             MainLayout.addView(ll);
             RelativeLayout.LayoutParams llp= (RelativeLayout.LayoutParams) ll.getLayoutParams();
-            if(LastLL==null)
+            llp.setMargins(scaler.WidthPercentToPixel(1),scaler.WidthPercentToPixel(1),scaler.WidthPercentToPixel(1),scaler.WidthPercentToPixel(1));
+            if(LastRowLL==null)
                 llp.addRule(RelativeLayout.BELOW,lbl_PriceContent.getId());
             else
-                llp.addRule(RelativeLayout.BELOW,LastLL.getId());
-            llp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT,1);
+                llp.addRule(RelativeLayout.BELOW,LastRowLL.getId());
+
+            if(i%PHOTO_ROW_SIZE==0)
+                llp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT,1);
+            else
+            {
+                llp.addRule(RelativeLayout.LEFT_OF,LastLL.getId());
+
+            }
+            if((i+1)%PHOTO_ROW_SIZE==0){
+                llp.addRule(RelativeLayout.ALIGN_PARENT_LEFT,1);
+                LastRowLL=ll;
+            }
+
+//            llp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT,1);
             ll.setId(View.generateViewId());
-            ((RelativeLayout.LayoutParams)(btnReserve.getLayoutParams())).addRule(RelativeLayout.BELOW,ll.getId());
             final String FileURL=theDoctorFiles.get(i).getFile_flu();
-            ll.setOnClickListener(new View.OnClickListener() {
+            if(getFileType(FileURL)==1)
+                Picasso.with(getActivity()).load(Constants.SITEURL+"/"+FileURL).fit().transform(transformation).into(imgFile);
+            else if(getFileType(FileURL)==2)
+                imgFile.setImageResource(R.drawable.defaultvideo);
+            imgFile.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     try
                     {
-                    String Format=FileURL.substring(FileURL.indexOf('.')).trim().toLowerCase();
-                    if(Format.equals(".jpg") || Format.equals(".png") || Format.equals(".tiff") || Format.equals(".jpeg") || Format.equals(".gif")) {
-                        final ImageView fileImage = getActivity().findViewById(R.id.fileimage);
-                        Picasso.with(getActivity()).load(Constants.SITEURL + "/" + FileURL).into(fileImage);
-                        fileImage.setVisibility(View.VISIBLE);
-                        fileImage.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                fileImage.setVisibility(View.GONE);
-                            }
-                        });
+                    if(getFileType(FileURL)==1) {//Image
 
-                        VideoView vv=getActivity().findViewById(R.id.filevideo);
-                        vv.setVisibility(View.GONE);
+//                        fileImage.setCornerRadius(3,3,3,3);
+                        if(FileURL.trim().length()>3) {
+                            Log.d("Image","Displaying Image File");
+                            final ImageView fileImage = getActivity().findViewById(R.id.fileimage);
+//                            fileImage.setVisibility(View.VISIBLE);
+                            Picasso.with(getActivity()).load(Constants.SITEURL + "/" + FileURL).into(fileImage);
+                            fileImage.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    fileImage.setImageResource(R.drawable.empty);
+                                }
+                            });
+//                            fileImage.bringToFront();
+
+                            vv.setVisibility(View.GONE);
+                        }
+                        else
+                        {
+
+                            Log.d("Image","Not Displaying Image File Width Size:"+FileURL.trim().length());
+                        }
                     }
-                    else if(Format.equals(".mkv") || Format.equals(".mp4") || Format.equals(".3gp") || Format.equals(".avi") || Format.equals(".mpeg") || Format.equals(".mpg")) {
-                        VideoView vv=getActivity().findViewById(R.id.filevideo);
-                        vv.setVideoPath(Constants.SITEURL + "/" + FileURL);
-                        vv.start();
-                        vv.setVisibility(View.VISIBLE);
-                        final VideoView vvv=vv;
-                        vv.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                vvv.setVisibility(View.GONE);
-                            }
-                        });
+                    else if(getFileType(FileURL)==2) {//Video
+                        String url = Constants.SITEURL + "/" + FileURL;
+                        new DownloadFileFromURL().execute(url);
+
+//                        final cn.jzvd.JZVideoPlayerStandard vvv=vv;
+//                        vv.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                vvv.setVisibility(View.GONE);
+//                            }
+//                        });
                         final ImageView fileImage = getActivity().findViewById(R.id.fileimage);
-                        fileImage.setVisibility(View.GONE);
+                        fileImage.setImageDrawable(null);
                     }
 
                     }catch (Exception ex)
@@ -195,8 +287,11 @@ public class DoctorItemFragment extends Fragment {
                     }
                 }
             });
+            ll.setId(View.generateViewId());
             LastLL=ll;
         }
+        if(LastLL!=null)
+            ((RelativeLayout.LayoutParams)(btnReserve.getLayoutParams())).addRule(RelativeLayout.BELOW,LastLL.getId());
         lbl_NameContent.setText(theDoctor.getName());
         lbl_FamilyContent.setText(theDoctor.getFamily());
         lbl_Nezam_codeContent.setText(theDoctor.getNezam_code());
@@ -207,7 +302,9 @@ public class DoctorItemFragment extends Fragment {
         lbl_MatabtelContent.setText(theDoctor.getMatabtel());
         lbl_MatabaddressContent.setText(theDoctor.getMatabaddress());
         lbl_PriceContent.setText(theDoctor.getPrice()+" ریال");
-        Picasso.with(getActivity().getApplicationContext()).load(Constants.SITEURL+String.valueOf(theDoctor.getPhoto_flu())).into(lbl_Photo_fluContent);
+
+        if(String.valueOf(theDoctor.getPhoto_flu()).trim().length()>3)
+            Picasso.with(getActivity().getApplicationContext()).load(Constants.SITEURL+String.valueOf(theDoctor.getPhoto_flu())).into(lbl_Photo_fluContent);
         btnReserve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -267,4 +364,100 @@ public class DoctorItemFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
     }
+    /**
+     * Background Async Task to download file
+     * */
+    class DownloadFileFromURL extends AsyncTask<String, String, String> {
+
+        /**
+         * Before starting background thread Show Progress Bar Dialog
+         * */
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            WaitBar.setVisibility(View.VISIBLE);
+            WaitBar.bringToFront();
+//            showDialog(progress_bar_type);
+        }
+
+        /**
+         * Downloading file in background thread
+         * */
+        @Override
+        protected String doInBackground(String... f_url) {
+            int count;
+            try {
+                URL url = new URL(f_url[0]);
+                URLConnection conection = url.openConnection();
+                conection.connect();
+
+                // this will be useful so that you can show a tipical 0-100%
+                // progress bar
+                int lenghtOfFile = conection.getContentLength();
+
+                // download the file
+                InputStream input = new BufferedInputStream(url.openStream(),
+                        8192);
+
+                // Output stream
+                OutputStream output = new FileOutputStream(Environment
+                        .getExternalStorageDirectory().toString()
+                        + "/.ocmsvid.mp4");
+                byte data[] = new byte[1024];
+
+                long total = 0;
+
+                while ((count = input.read(data)) != -1) {
+                    total += count;
+                    // publishing the progress....
+                    // After this onProgressUpdate will be called
+                    publishProgress("" + (int) ((total * 100) / lenghtOfFile));
+
+                    // writing data to file
+                    output.write(data, 0, count);
+                }
+
+                // flushing output
+                output.flush();
+
+                // closing streams
+                output.close();
+                input.close();
+
+            } catch (Exception e) {
+                Log.e("Error: ", e.getMessage());
+            }
+
+            return null;
+        }
+
+        /**
+         * Updating progress bar
+         * */
+        protected void onProgressUpdate(String... progress) {
+            // setting progress percentage
+//            pDialog.setProgress(Integer.parseInt(progress[0]));
+        }
+
+        /**
+         * After completing background task Dismiss the progress dialog
+         * **/
+        @Override
+        protected void onPostExecute(String file_url) {
+
+            WaitBar.setVisibility(View.GONE);
+            vv.setUp(Environment
+                            .getExternalStorageDirectory().toString()
+                            + "/.ocmsvid.mp4",
+                    JZVideoPlayerStandard.SCREEN_WINDOW_NORMAL,
+                    "");
+            vv.bringToFront();
+            vv.setVisibility(View.VISIBLE);
+            // dismiss the dialog after the file was downloaded
+//            dismissDialog(progress_bar_type);
+
+        }
+
+    }
 }
+

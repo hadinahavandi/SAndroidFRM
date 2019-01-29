@@ -21,13 +21,14 @@
 
                 <ImageView
                     android:id="@+id/lbl_photo_flu_content"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:layout_margin="@dimen/text_margin"
                     android:text=" "
-                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:src="@drawable/defaultphoto"
+                    android:scaleType="centerCrop"
                     android:textColor="#333" />
                 <TextView
                     android:id="@+id/lbl_name_content"
@@ -37,7 +38,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_margin="@dimen/text_margin"
                     android:text=" "
-                    android:textAppearance="?attr/textAppearanceListItem"
+                    
                     android:textColor="#333" />
 
                 <TextView
@@ -48,7 +49,6 @@
                     android:layout_margin="@dimen/text_margin"
                     android:layout_toLeftOf="@id/lbl_name_content"
                     android:text=" "
-                    android:textAppearance="?attr/textAppearanceListItem"
                     android:textColor="#333" />
 
                 <TextView
@@ -60,7 +60,6 @@
                     android:layout_margin="@dimen/text_margin"
                     android:text="کد نظام پزشکی:"
                     android:visibility="gone"
-                    android:textAppearance="?attr/textAppearanceListItem"
                     android:textColor="#333" />
 
                 <TextView
@@ -72,7 +71,6 @@
                     android:layout_toLeftOf="@id/lbl_nezam_code_caption"
                     android:text=" "
                     android:visibility="gone"
-                    android:textAppearance="?attr/textAppearanceListItem"
                     android:textColor="#333" />
 
                 <TextView
@@ -83,7 +81,7 @@
                     android:layout_below="@id/lbl_nezam_code_content"
                     android:layout_margin="@dimen/text_margin"
                     android:text="ایمیل:"
-                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:visibility="gone"
                     android:textColor="#333" />
 
                 <TextView
@@ -94,7 +92,7 @@
                     android:layout_margin="@dimen/text_margin"
                     android:layout_toLeftOf="@id/lbl_email_caption"
                     android:text=" "
-                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:visibility="gone"
                     android:textColor="#333" />
 
                 <TextView
@@ -106,7 +104,6 @@
                     android:layout_margin="@dimen/text_margin"
                     android:text="تلفن:"
                     android:visibility="gone"
-                    android:textAppearance="?attr/textAppearanceListItem"
                     android:textColor="#333" />
 
                 <TextView
@@ -118,7 +115,7 @@
                     android:layout_toLeftOf="@id/lbl_tel_caption"
                     android:text=" "
                     android:visibility="gone"
-                    android:textAppearance="?attr/textAppearanceListItem"
+                    
                     android:textColor="#333" />
 
                 <TextView
@@ -129,7 +126,8 @@
                     android:layout_margin="@dimen/text_margin"
                     android:layout_alignParentRight="true"
                     android:text="تخصص: "
-                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:visibility="gone"
+                    
                     android:textColor="#333" />
                 <TextView
                     android:id="@+id/lbl_speciality_fid_content"
@@ -139,7 +137,8 @@
                     android:layout_toLeftOf="@id/lbl_speciality_fid_caption"
                     android:layout_margin="@dimen/text_margin"
                     android:text=""
-                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:visibility="gone"
+                    
                     android:textColor="#333" />
 
                 <TextView
@@ -150,7 +149,8 @@
                     android:layout_below="@id/lbl_speciality_fid_content"
                     android:layout_margin="@dimen/text_margin"
                     android:text="تحصیلات:"
-                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:visibility="gone"
+                    
                     android:textColor="#333" />
 
                 <TextView
@@ -162,7 +162,8 @@
                     android:layout_margin="@dimen/text_margin"
                     android:layout_toLeftOf="@id/lbl_education_caption"
                     android:text=""
-                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:visibility="gone"
+                    
                     android:textColor="#333" />
 
                 <TextView
@@ -173,7 +174,7 @@
                     android:layout_below="@id/lbl_education_caption"
                     android:layout_margin="@dimen/text_margin"
                     android:text="تلفن:"
-                    android:textAppearance="?attr/textAppearanceListItem"
+                    
                     android:textColor="#333" />
 
                 <TextView
@@ -184,7 +185,7 @@
                     android:layout_margin="@dimen/text_margin"
                     android:layout_toLeftOf="@id/lbl_matabtel_caption"
                     android:text=" "
-                    android:textAppearance="?attr/textAppearanceListItem"
+                    
                     android:textColor="#333" />
 
                 <TextView
@@ -195,7 +196,7 @@
                     android:layout_below="@id/lbl_matabtel_caption"
                     android:layout_margin="@dimen/text_margin"
                     android:text="آدرس:"
-                    android:textAppearance="?attr/textAppearanceListItem"
+                    
                     android:textColor="#333" />
 
                 <TextView
@@ -207,7 +208,7 @@
                     android:layout_margin="@dimen/text_margin"
                     android:layout_toLeftOf="@id/lbl_matabaddress_caption"
                     android:text=" "
-                    android:textAppearance="?attr/textAppearanceListItem"
+                    
                     android:textColor="#333" />
 
 
@@ -219,7 +220,7 @@
                     android:layout_below="@id/lbl_matabaddress_content"
                     android:layout_margin="@dimen/text_margin"
                     android:text="هزینه مراجعه:"
-                    android:textAppearance="?attr/textAppearanceListItem"
+                    
                     android:textColor="#333" />
 
                 <TextView
@@ -231,15 +232,18 @@
                     android:layout_margin="@dimen/text_margin"
                     android:layout_toLeftOf="@id/lbl_price_caption"
                     android:text=" "
-                    android:textAppearance="?attr/textAppearanceListItem"
+                    
                     android:textColor="#333" />
 
                 <Button
                     android:id="@+id/btn_reserve"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingHorizontal="10dp"
                     android:layout_below="@id/lbl_price_caption"
                     android:layout_centerHorizontal="true"
+                    android:textColor="@color/colorButtonColor"
+                    android:background="@color/colorButtonBG"
                     android:text="رزرو وقت" />
             </RelativeLayout>
 
@@ -251,11 +255,21 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:src="@drawable/empty"
         android:id="@+id/fileimage"/>
-    <VideoView
+    <cn.jzvd.JZVideoPlayerStandard
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        android:id="@+id/filevideo" />
+        android:id="@+id/filevideo"
+        android:layout_centerInParent="true"
+        android:drawingCacheQuality="low"/>
+    <ProgressBar
+        android:id="@+id/progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        />
 </RelativeLayout>

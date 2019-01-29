@@ -1,6 +1,10 @@
 package ir.sweetsoft.ocms;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.MenuItem;
+
+import ir.sweetsoft.ocms.layout.MenuFragment;
 import ocms.DoctorreserveFragment;
 
 public class MainActivity extends ir.sweetsoft.sweetlibone.Activities.MainActivity
@@ -19,5 +23,13 @@ public class MainActivity extends ir.sweetsoft.sweetlibone.Activities.MainActivi
             showFragment(DoctorreserveFragment.class);
         }
         return true;
+    }
+
+    public void routeToIndex()
+    {
+        Log.d("Route","Routing to Index From APP");
+
+        showFragment(MenuFragment.class);
+        setNavigationDrawerLockState(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 }

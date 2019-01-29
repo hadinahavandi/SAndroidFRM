@@ -19,35 +19,49 @@
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@android:drawable/ic_dialog_email" />
 
+    <!--<android.support.design.widget.AppBarLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:theme="@style/AppTheme.AppBarOverlay">-->
+<!--<RelativeLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="?attr/actionBarSize"-->
+    <!--android:padding="10dp"-->
+    <!--android:background="@color/background_color"-->
+    <!--android:id="@+id/topbar"-->
+    <!--android:visibility="gone">-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/pagetitle"-->
+        <!--android:layout_width="296dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:text="Sweet Text2Speech"-->
+        <!--android:textColor="#fff" />-->
+
+    <!--<ImageView-->
+        <!--android:id="@+id/imgmenu"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--app:srcCompat="@drawable/ic_action_name" />-->
+<!--</RelativeLayout>-->
+
+    <!--</android.support.design.widget.AppBarLayout>-->
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="?attr/actionBarSize"
-    android:padding="10dp"
-    android:background="@color/background_color"
-    android:id="@+id/topbar">
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:background="@color/background_color">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sweet Text2Speech"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:id="@+id/pagetitle"
-        android:textColor="#fff"/>
-
-    <ImageView
-        android:id="@+id/imgmenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        app:srcCompat="@drawable/ic_action_name" />
-</RelativeLayout>
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            />
 
     </android.support.design.widget.AppBarLayout>
-
 </android.support.design.widget.CoordinatorLayout>

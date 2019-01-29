@@ -1,1 +1,1 @@
-include ':app', ':MaterialDatePicker', ':voicestoryshop', ':sweetlib1', ':sweettts'
+include ':app', ':MaterialDatePicker', ':voicestoryshop', ':sweetlib1', ':sweettts', ':GES'

@@ -35,4 +35,6 @@ public static final String SIGNUPURL=SITEURL+"json/fa/onlineclass/manageuser.jsp
     public static int SPECIALITYGROUP_DENTIST=2;
     public static int SPECIALITYGROUP_PSYCHOLOGY=3;
     public static int SPECIALITYGROUP_BEAUTYSHOP=4;
+    public static int SPECIALITYGROUP_BEAUTYSHOP_MAN=7;
+    public static int SPECIALITYGROUP_BEAUTYSHOP_WOMAN=8;
 }

@@ -36,7 +36,7 @@ import ir.sweetsoft.sweetlibone.R;
 public class SignupMenuFragment extends Fragment {
     private Button btnSignup;
     private Button btnLogin;
-    private ImageView PageBG;
+//    private ImageView PageBG;
 
     private OnFragmentInteractionListener mListener;
 
@@ -65,12 +65,12 @@ public class SignupMenuFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         btnSignup=(Button)getView().findViewById(R.id.btnsignup);
         btnLogin=(Button)getView().findViewById(R.id.btnlogin);
-        PageBG=(ImageView) getView().findViewById(R.id.pagebg);
-        Bitmap bitmap= BitmapFactory.decodeResource(getActivity().getResources(),
-                R.drawable.bg3);
-        int nh = (int) ( bitmap.getHeight() * (512.0 / bitmap.getWidth()) );
-        Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 512, nh, true);
-        PageBG.setImageBitmap(scaled);
+//        PageBG=(ImageView) getView().findViewById(R.id.pagebg);
+//        Bitmap bitmap= BitmapFactory.decodeResource(getActivity().getResources(),
+//                R.drawable.bg3);
+//        int nh = (int) ( bitmap.getHeight() * (512.0 / bitmap.getWidth()) );
+//        Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 512, nh, true);
+//        PageBG.setImageBitmap(scaled);
         Typeface face= Typeface.createFromAsset(getActivity().getAssets(),"fonts/IRANSansMobile.ttf");
         btnSignup.setTypeface(face);
         btnLogin.setTypeface(face);

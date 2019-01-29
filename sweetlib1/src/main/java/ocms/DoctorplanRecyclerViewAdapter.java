@@ -80,10 +80,11 @@ public class DoctorplanRecyclerViewAdapter extends RecyclerView.Adapter<Doctorpl
 								@Override
 								public void onClick(View v) {
                                     PurchaseFragment frg=(PurchaseFragment)theActivity.showFragment(PurchaseFragment.class);
+                                    final MainActivity theAct=theActivity;
                                     frg.setThePurchaseCompleteListener(new PurchaseFragment.onPurchaseCompleteListener() {
 										@Override
 										public void OnPurchaseComplete() {
-											theActivity.showFragment(MenuFragment.class);
+                                            theAct.routeToIndex();
 											order(mValues.get(position).getId());
 
 										}

@@ -17,7 +17,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
-	 
+
     // All Static variables
     // Database Version
     private static final int DATABASE_VERSION = 3;
@@ -30,18 +30,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
-    	DBName=DATABASE_NAME;
-    	DBVersion=DATABASE_VERSION;
+        DBName=DATABASE_NAME;
+        DBVersion=DATABASE_VERSION;
         this.context=context;
     }
     public DatabaseHandler(Context context,String DatabaseName,int DatabaseVersion) {
         super(context, DatabaseName, null, DatabaseVersion);
 
-    	DBName=DatabaseName;
-    	DBVersion=DatabaseVersion;
+        DBName=DatabaseName;
+        DBVersion=DatabaseVersion;
         this.context=context;
     }
- 
+
     // Creating Tables
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -50,7 +50,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(CREATE_POST_TABLE);
         db.execSQL(CREATE_CONSTANT_TABLE);*/
     }
- 
+
     // Upgrading database
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -62,32 +62,32 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
     public boolean Initialize()
     {
-    	return Initialize("init.db");
+        return Initialize("init.db");
     }
     public boolean Initialize(String initDBName)
     {
-    	boolean inited=false;
-    	try {
-    		String Dir="/data/data/" + context.getPackageName()
+        boolean inited=false;
+        try {
+            String Dir="/data/data/" + context.getPackageName()
                     + "/databases/";
             String destPath = Dir+DBName;
 
             File f = new File(destPath);
             if(!f.exists())
             {
-            	File dir=new File(Dir);
-            	dir.mkdirs();
-            	InputStream in = context.getAssets().open(initDBName);
-            	OutputStream out = new FileOutputStream(destPath);
+                File dir=new File(Dir);
+                dir.mkdirs();
+                InputStream in = context.getAssets().open(initDBName);
+                OutputStream out = new FileOutputStream(destPath);
 
-            	byte[] buffer = new byte[1024];
-            	int length;
-            	while ((length = in.read(buffer)) > 0) {
-                out.write(buffer, 0, length);
-                inited=true;
-            }
-            in.close();
-            out.close();
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = in.read(buffer)) > 0) {
+                    out.write(buffer, 0, length);
+                    inited=true;
+                }
+                in.close();
+                out.close();
             }
 
         } catch (FileNotFoundException e) {
@@ -95,48 +95,48 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    	return inited;
+        return inited;
     }
 
     public void Import(String FilePath)
     {
-    	try {
-    		PackageManager m = context.getPackageManager();
-    		String APPPath = context.getPackageName();
-    		PackageInfo p = null;
-			try {
-				p = m.getPackageInfo(APPPath, 0);
-				APPPath = p.applicationInfo.dataDir;
-				Log.d("sweetsoft","importing DB In APPPath:\n"+APPPath);
-				Log.d("sweetsoft","importing DB From:"+FilePath);
-				
-			} catch (NameNotFoundException e) {
-				
-				e.printStackTrace();
-			}
-    		
-    		String Dir=APPPath+ "/databases/";
+        try {
+            PackageManager m = context.getPackageManager();
+            String APPPath = context.getPackageName();
+            PackageInfo p = null;
+            try {
+                p = m.getPackageInfo(APPPath, 0);
+                APPPath = p.applicationInfo.dataDir;
+                Log.d("sweetsoft","importing DB In APPPath:\n"+APPPath);
+                Log.d("sweetsoft","importing DB From:"+FilePath);
+
+            } catch (NameNotFoundException e) {
+
+                e.printStackTrace();
+            }
+
+            String Dir=APPPath+ "/databases/";
             String dbPath = Dir+DBName;
-            
+
             File f = new File(FilePath);
-			Log.d("sweetsoft","importing DB Size:"+String.valueOf(f.length()));
+            Log.d("sweetsoft","importing DB Size:"+String.valueOf(f.length()));
             File DBFile = new File(dbPath);
             if(DBFile.exists())
             {
-            	f.mkdirs();
-            	File dir=new File(Dir);
-            	dir.mkdirs();
-            	InputStream in = new FileInputStream(FilePath);
-            	OutputStream out = new FileOutputStream(dbPath);
+                f.mkdirs();
+                File dir=new File(Dir);
+                dir.mkdirs();
+                InputStream in = new FileInputStream(FilePath);
+                OutputStream out = new FileOutputStream(dbPath);
 
-            	byte[] buffer = new byte[1024];
-            	int length;
-            	while ((length = in.read(buffer)) > 0) 
-            	{
-            		out.write(buffer, 0, length);
-            	}
-            	in.close();
-            	out.close();
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = in.read(buffer)) > 0)
+                {
+                    out.write(buffer, 0, length);
+                }
+                in.close();
+                out.close();
             }
             Log.d("sweetsoft", "Importing Database ");
 
@@ -148,48 +148,48 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
     public boolean Export(String FileDirectory,String FileName)
     {
-    	boolean inited=false;
-    	try {
-    		PackageManager m = context.getPackageManager();
-    		String APPPath = context.getPackageName();
-    		PackageInfo p = null;
-			try {
-				p = m.getPackageInfo(APPPath, 0);
-				APPPath = p.applicationInfo.dataDir;
-				Log.d("sweetsoft", "Exporting to AppPath:\n"+APPPath);
-				Log.d("sweetsoft", "Exporting File:\n"+FileName);
-				Log.d("sweetsoft", "Exporting FileDirectory:\n"+FileDirectory);
-				
-			} catch (NameNotFoundException e) {
-				
-				e.printStackTrace();
-			}
-    		
-    		String Dir=APPPath+ "/databases/";
+        boolean inited=false;
+        try {
+            PackageManager m = context.getPackageManager();
+            String APPPath = context.getPackageName();
+            PackageInfo p = null;
+            try {
+                p = m.getPackageInfo(APPPath, 0);
+                APPPath = p.applicationInfo.dataDir;
+                Log.d("sweetsoft", "Exporting to AppPath:\n"+APPPath);
+                Log.d("sweetsoft", "Exporting File:\n"+FileName);
+                Log.d("sweetsoft", "Exporting FileDirectory:\n"+FileDirectory);
+
+            } catch (NameNotFoundException e) {
+
+                e.printStackTrace();
+            }
+
+            String Dir=APPPath+ "/databases/";
             String dbPath = Dir+DBName;
-            
+
 
             File f = new File(FileDirectory);
             File DBFile = new File(dbPath);
 
-			Log.d("sweetsoft","exporting DB Size:"+String.valueOf(DBFile.length()));
+            Log.d("sweetsoft","exporting DB Size:"+String.valueOf(DBFile.length()));
             if(DBFile.exists())
             {
-            	f.mkdirs();
-            	File dir=new File(Dir);
-            	dir.mkdirs();
-            	InputStream in = new FileInputStream(dbPath);
-            	OutputStream out = new FileOutputStream(FileDirectory+FileName);
+                f.mkdirs();
+                File dir=new File(Dir);
+                dir.mkdirs();
+                InputStream in = new FileInputStream(dbPath);
+                OutputStream out = new FileOutputStream(FileDirectory+FileName);
 
-            	byte[] buffer = new byte[1024];
-            	int length;
-            	while ((length = in.read(buffer)) > 0) 
-            	{
-            		out.write(buffer, 0, length);
-            		inited=true;
-            	}
-            	in.close();
-            	out.close();
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = in.read(buffer)) > 0)
+                {
+                    out.write(buffer, 0, length);
+                    inited=true;
+                }
+                in.close();
+                out.close();
             }
 
         } catch (FileNotFoundException e) {
@@ -197,6 +197,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    	return inited;
+        return inited;
     }
 }
