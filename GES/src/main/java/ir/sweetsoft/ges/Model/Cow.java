@@ -8,8 +8,8 @@ import com.activeandroid.annotation.Table;
 
 @Table(name = "cow")
 public class Cow extends Model {
-    @Column(name = "herd_fid", index = true)
-    public String Herd;
+    @Column(name = "herdfile_fid", index = true,onDelete = Column.ForeignKeyAction.CASCADE)
+    public HerdFile HerdFile;
     @Column(name = "code", index = true,notNull = true)
     public int CowCode;
     @Column(name = "sire")

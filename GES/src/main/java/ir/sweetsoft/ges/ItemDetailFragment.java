@@ -3,7 +3,9 @@ package ir.sweetsoft.ges;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
 import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -28,6 +30,7 @@ import common.Exceptions.InvalidInputException;
 import common.SweetDisplayScaler;
 import ir.sweetsoft.ges.Model.Cow;
 import ir.sweetsoft.ges.Model.Herd;
+import ir.sweetsoft.ges.Model.HerdFile;
 
 /**
  * A fragment representing a single Item detail screen.
@@ -75,7 +78,7 @@ public class ItemDetailFragment extends Fragment {
     TextView[] Labels;
     EditText[] Inputs;
     RelativeLayout[] Columns;
-    private String FragmentHerdCode="";
+    private HerdFile FragmentHerdFile=null;
     private Boolean FragmentIsHeifer=false;
     /**
      * The fragment argument representing the item ID that this fragment
@@ -112,14 +115,14 @@ public class ItemDetailFragment extends Fragment {
         String Sire = Row_sire.getInput().getText().toString().toUpperCase().trim();
         String MMGS = Row_mmgs.getInput().getText().toString().toUpperCase().trim();
         String MGS = Row_mgs.getInput().getText().toString().toUpperCase().trim();
-        Log.d("Saving", FragmentHerdCode);
-        List<Cow> cows = new Select().from(Cow.class).where("code = ? and herd_fid = ?", CowCode, FragmentHerdCode).execute();
+        Log.d("Saving", FragmentHerdFile.Herd.Code);
+        List<Cow> cows = new Select().from(Cow.class).where("code = ? and herdfile_fid = ?", CowCode, FragmentHerdFile.getId()).execute();
         Log.d("Saving", "Started somes");
         if ((!CowCode.equals(mItem.CowCode+"")) && cows != null && cows.size() > 0)// Adding New Item or Changing It's CowID And It Exists Before
             ContainerActivity.showAlert("Error", "Error: Cow ID Exists.", null, true);
         else if(CowCode.trim().length()>0) {
             Log.d("Saving", "hi"+getEditTextIntAndCheck(Row_st.getInput()));
-            mItem.Herd = FragmentHerdCode;
+            mItem.HerdFile = FragmentHerdFile;
             mItem.ls = getEditTextIntAndCheck(Row_ls.getInput());
             mItem.st = getEditTextIntAndCheck(Row_st.getInput());
             mItem.sr = getEditTextIntAndCheck(Row_sr.getInput());
@@ -167,7 +170,7 @@ public class ItemDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ContainerActivity = ((CowManActivity) getActivity());
-        FragmentHerdCode=ContainerActivity.SelectedHerdCode;
+        FragmentHerdFile=ContainerActivity.SelectedHerdFile;
         FragmentIsHeifer=ContainerActivity.getHeifer();
         if (getArguments().containsKey(CowManActivity.ARG_ITEM_ID)) {
             // Load the dummy content specified by the fragment
@@ -266,6 +269,7 @@ public class ItemDetailFragment extends Fragment {
 
         SweetDisplayScaler scaler=new SweetDisplayScaler(getActivity());
         txt_Code.getLayoutParams().width=scaler.WidthPercentToPixel(CodeWidthPercent);
+        txt_Code.setBackgroundResource(R.drawable.secondedittext);
         txt_Code.setTextSize(TypedValue.COMPLEX_UNIT_PX,scaler.WidthPercentToPixel(CodeFontSizePercent));
         lbl_Code.getLayoutParams().width=scaler.WidthPercentToPixel(CodeLabelPercent);
         lbl_Code.setTextSize(TypedValue.COMPLEX_UNIT_PX,scaler.WidthPercentToPixel(CodeFontSizePercent));
@@ -274,22 +278,51 @@ public class ItemDetailFragment extends Fragment {
         RowView[] Rows={Row_st,Row_sr,Row_bd,Row_df,Row_ra,Row_rw,Row_sv,Row_rv,Row_fa,Row_fu,Row_uh,Row_uw,Row_uc,Row_ud,Row_tp,Row_tl,Row_rtp,Row_ls,Row_sire,Row_mgs,Row_mmgs};
         int ColumnCount=3;
         for(int i=0;i<Rows.length;i=i+ColumnCount)
-            for(int j=0;j<ColumnCount && i+j<Rows.length;j++)
-            {
-                Rows[i+j].setId(View.generateViewId());
-                Columns[j].addView(Rows[i+j]);
-                Rows[i+j].setFilters(3,1,100);
-                Rows[i+j].getLabel().getLayoutParams().width=scaler.WidthPercentToPixel(ItemLabelPercent);
-                Rows[i+j].getLabel().setTextSize(TypedValue.COMPLEX_UNIT_PX,scaler.WidthPercentToPixel(FontSizePercent));
-                Rows[i+j].getInput().getLayoutParams().width=scaler.WidthPercentToPixel(ItemWidthPercent);
-                Rows[i+j].getInput().setTextSize(TypedValue.COMPLEX_UNIT_PX,scaler.WidthPercentToPixel(FontSizePercent));
-                ((RelativeLayout.LayoutParams)Rows[i+j].getLayoutParams()).topMargin= (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics());
-                if(i>0)
-                    ((RelativeLayout.LayoutParams)Rows[i+j].getLayoutParams()).addRule(RelativeLayout.BELOW,Rows[i+j-ColumnCount].getId());
+            for(int j=0;j<ColumnCount && i+j<Rows.length;j++) {
+                Rows[i + j].setId(View.generateViewId());
+                Columns[j].addView(Rows[i + j]);
+                Rows[i + j].setFilters(3, 1, 100);
+                Rows[i + j].getLabel().getLayoutParams().width = scaler.WidthPercentToPixel(ItemLabelPercent);
+                Rows[i + j].getLabel().setTextSize(TypedValue.COMPLEX_UNIT_PX, scaler.WidthPercentToPixel(FontSizePercent));
+                Rows[i + j].getInput().getLayoutParams().width = scaler.WidthPercentToPixel(ItemWidthPercent);
+                Rows[i + j].getInput().setTextSize(TypedValue.COMPLEX_UNIT_PX, scaler.WidthPercentToPixel(FontSizePercent));
+
+                ((RelativeLayout.LayoutParams) Rows[i + j].getLayoutParams()).topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics());
+                if (i > 0)
+                    ((RelativeLayout.LayoutParams) Rows[i + j].getLayoutParams()).addRule(RelativeLayout.BELOW, Rows[i + j - ColumnCount].getId());
+                int EndOfMovingForward=Rows.length-4;//LS Sire MGS and MMGS
+                if(ContainerActivity.getHeifer())
+                    EndOfMovingForward=EndOfMovingForward-8;//Only Cow Fields
+                if (i + j > 0 && i+j<EndOfMovingForward) {
+                    final EditText CurrentField = Rows[i + j].getInput();
+                    final EditText PreviousField = Rows[i + j - 1].getInput();
+                    PreviousField.setNextFocusForwardId(CurrentField.getId());
+                    PreviousField.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                        }
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            if(PreviousField.getText().toString().length()==2)
+                                CurrentField.requestFocus();
+
+                        }
+                        @Override
+                        public void afterTextChanged(Editable s) {
+
+                        }
+                    });
+
+                }
             }
+
             Row_sire.setFilters(7,0,9999999);
             Row_mgs.setFilters(7,0,9999999);
             Row_mmgs.setFilters(7,0,9999999);
+            Row_sire.getInput().setBackgroundResource(R.drawable.secondedittext);
+        Row_mgs.getInput().setBackgroundResource(R.drawable.secondedittext);
+        Row_mmgs.getInput().setBackgroundResource(R.drawable.secondedittext);
         Row_sire.getLabel().setTextSize(TypedValue.COMPLEX_UNIT_PX,scaler.WidthPercentToPixel(MediumFontSizePercent));
         Row_sire.getInput().setTextSize(TypedValue.COMPLEX_UNIT_PX,scaler.WidthPercentToPixel(SmallFontSizePercent));
         Row_mgs.getLabel().setTextSize(TypedValue.COMPLEX_UNIT_PX,scaler.WidthPercentToPixel(MediumFontSizePercent));

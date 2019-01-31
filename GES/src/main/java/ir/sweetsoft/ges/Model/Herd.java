@@ -6,7 +6,7 @@ import com.activeandroid.annotation.Table;
 
 @Table(name = "herd")
 public class Herd extends Model {
-    @Column(name = "code")
+    @Column(name = "code",onDelete = Column.ForeignKeyAction.CASCADE)
     public String Code;
     public Herd()
     {

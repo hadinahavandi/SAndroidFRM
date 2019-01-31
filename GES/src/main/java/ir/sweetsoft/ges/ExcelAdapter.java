@@ -20,6 +20,7 @@ import calendar.PersianDate;
 import common.Exceptions.ItemExistsException;
 import ir.sweetsoft.ges.Exceptions.noSheetException;
 import ir.sweetsoft.ges.Model.Cow;
+import ir.sweetsoft.ges.Model.HerdFile;
 import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
@@ -46,11 +47,11 @@ public class ExcelAdapter {
     {
         theActivity=Context;
     }
-    public WritableWorkbook createExcelSheet(WritableWorkbook workbook,String HerdID,Boolean isFilled,Boolean isHeifer,int SheetNumber) throws Exception
+    private WritableWorkbook createExcelSheet(WritableWorkbook workbook,HerdFile theHerdFile,Boolean isFilled,Boolean isHeifer,int SheetNumber) throws Exception
     {
-        List<Cow> Cows=new Select().from(Cow.class).orderBy("code").where("herd_fid= ? AND is_filled= ? AND isheifer= ?",HerdID,isFilled,isHeifer).execute();
+        List<Cow> Cows=new Select().from(Cow.class).orderBy("code").where("herdfile_fid= ? AND is_filled= ? AND isheifer= ?",theHerdFile.getId(),isFilled,isHeifer).execute();
         int StartRow=0;
-        String SheetName="Herd "+HerdID;
+        String SheetName="Herd "+theHerdFile.Herd.Code;
         if(isFilled)
             SheetName=SheetName+" ";
         else
@@ -64,7 +65,7 @@ public class ExcelAdapter {
         Label HerdCode=new Label(0,StartRow,"Herd ID:");
         HerdCode.setCellFormat(getTitleFormat());
         theSheet.addCell(HerdCode);
-        Label HerdCodeContent=new Label(1,StartRow,HerdID);
+        Label HerdCodeContent=new Label(1,StartRow,theHerdFile.Herd.Code);
         HerdCodeContent.setCellFormat(getNormalFormat());
         theSheet.addCell(HerdCodeContent);
         StartRow++;
@@ -76,7 +77,7 @@ public class ExcelAdapter {
             String[] Items={(CowIndex+1)+"",theCow.CowCode+"",theCow.sire,theCow.mgs,theCow.mmgs,theCow.ls+""
                     ,theCow.st+"",theCow.sr+"",theCow.bd+"",theCow.df+"",theCow.ra+"",theCow.rw+"",theCow.sv+""
                     ,theCow.rv+"",theCow.fa+"",theCow.fu+"",theCow.uh+"",theCow.uw+"",theCow.uc+""
-                    ,theCow.ud+"",theCow.tp+"",theCow.tl+"",theCow.rtp+""};
+                    ,theCow.ud+"",theCow.tp+"",theCow.tl+"",theCow.rtp+"",theCow.Description+""};
             Label[] ItemLables=new Label[Items.length];
             for(int i=0;i<ItemLables.length;i++)
             {
@@ -90,21 +91,21 @@ public class ExcelAdapter {
         return workbook;
 
     }
-    public int makeExcelFromHerd(String HerdID,String ExportPath) throws Exception
+    public int makeExcelFromHerd(HerdFile theHerdFile,String ExportPath) throws Exception
     {
         WritableWorkbook workbook = Workbook.createWorkbook(new File(ExportPath));
         int AddedRows=0;
-        workbook=createExcelSheet(workbook,HerdID,false,false,0);
-        workbook=createExcelSheet(workbook,HerdID,false,true,1);
-        workbook=createExcelSheet(workbook,HerdID,true,false,2);
-        workbook=createExcelSheet(workbook,HerdID,true,true,3);
+        workbook=createExcelSheet(workbook,theHerdFile,true,false,0);
+        workbook=createExcelSheet(workbook,theHerdFile,true,true,1);
+        workbook=createExcelSheet(workbook,theHerdFile,false,false,2);
+        workbook=createExcelSheet(workbook,theHerdFile,false,true,3);
         workbook.write();
         workbook.close();
         return AddedRows;
     }
     private int AddTitles(WritableSheet theXLSheet,int StartRow) throws Exception
     {
-        String[] Titles={"#","cow-lD","Sire","M.G.S","M.M.G.S","LS","ST","SR","BD","DF","RA","RW","SV","RV","FA","FU","UH","UW","UC","UD","FTP","TL","RTP"};
+        String[] Titles={"#","cow-lD","Sire","M.G.S","M.M.G.S","LS","ST","SR","BD","DF","RA","RW","SV","RV","FA","FU","UH","UW","UC","UD","FTP","TL","RTP","Comments"};
         Label[] TitleLables=new Label[Titles.length];
         for(int i=0;i<Titles.length;i++)
         {
@@ -135,7 +136,7 @@ public class ExcelAdapter {
         tableFormatBackground.setAlignment(Alignment.CENTRE);// set alignment left
         return tableFormatBackground;
     }
-    public int importDataExcel(String HerdID,String ImportingFilePath) throws SQLiteConstraintException,IOException,BiffException,noSheetException,ItemExistsException {
+    public int importDataExcel(HerdFile theHerdFile,Boolean isHeifer, String ImportingFilePath) throws SQLiteConstraintException,IOException,BiffException,noSheetException,ItemExistsException {
 
         ActiveAndroid.beginTransaction();
         File inputWorkbook = new File(ImportingFilePath);
@@ -144,7 +145,7 @@ public class ExcelAdapter {
         {
             Workbook w;
             w = Workbook.getWorkbook(inputWorkbook);
-            new Delete().from(Cow.class).where("herd_fid = ?",HerdID).execute();
+            new Delete().from(Cow.class).where("herdfile_fid = ? AND isheifer = ?",theHerdFile.getId(),isHeifer).execute();
             /***************Read UserList From Sheet0****************/
             Sheet CowListSheet = w.getSheet(0);
             if (CowListSheet.getRows() > 1) {
@@ -152,7 +153,7 @@ public class ExcelAdapter {
                     CowListSheet.getColumns();
                     Cell[] RowsCols=CowListSheet.getRow(row);
                     String CowCode=RowsCols[1].getContents().trim().toUpperCase();
-                    List<Cow> cows= new Select().from(Cow.class).where("code = ?",CowCode).and("herd_fid = ?",HerdID).execute();
+                    List<Cow> cows= new Select().from(Cow.class).where("code = ? AND isheifer = ? AND herdfile_fid = ?",CowCode,isHeifer,theHerdFile.getId()).execute();
                     if(cows!=null && cows.size()>0)
                     {
                         ActiveAndroid.endTransaction();
@@ -162,7 +163,7 @@ public class ExcelAdapter {
                     if(!CowCode.equals(""))
                     {
                         Cow cow=new Cow();
-                        cow.Herd=HerdID;
+                        cow.HerdFile=theHerdFile;
                         cow.CowCode=Integer.parseInt(CowCode);
                         if(RowsCols.length>2)
                             cow.sire=RowsCols[2].getContents().trim().toUpperCase();
@@ -170,6 +171,7 @@ public class ExcelAdapter {
                             cow.mgs=RowsCols[3].getContents().trim().toUpperCase();
                         if(RowsCols.length>4)
                             cow.mmgs=RowsCols[4].getContents().trim().toUpperCase();
+                        cow.IsHeifer=isHeifer;
                         cow.SaveData();
                         AddedRows++;
                     }

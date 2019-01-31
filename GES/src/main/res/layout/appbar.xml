@@ -68,23 +68,20 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="23sp"
                 android:textStyle="bold"
                 android:layout_marginLeft="10dp"
-                android:text="HerdID:"
+                android:text="Herd:"
                 android:id="@+id/lblHerdID"
                 android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"/>
-            <Spinner
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#ffffff"
                 android:textStyle="bold"
-                android:textSize="23sp"
-                android:id="@+id/herdselect"
-                android:padding="5dp"
-                android:layout_toRightOf="@id/lblHerdID"
-                android:layout_centerVertical="true"></Spinner>
+                android:layout_marginLeft="10dp"
+                android:id="@+id/lbl_HerdContent"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/lblHerdID"/>
             <!--<EditText-->
             <!--android:layout_width="wrap_content"-->
             <!--android:layout_height="wrap_content"-->

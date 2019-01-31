@@ -130,10 +130,17 @@ public class ItemListActivity extends CowManActivity {
         public void onBindViewHolder(final ViewHolder holder, int position) {
             Cow Item=mValues.get(position);
             holder.mIdView.setText(Item.CowCode+"");
-            if(Item.isFilled)
+            if(Item.isFilled){
+
                 holder.mIdContainer.setBackgroundResource(R.color.ListFilled);
+                holder.mIdView.setTextColor(Color.parseColor("#ffffff"));
+            }
             else
+            {
+
                 holder.mIdContainer.setBackgroundResource(R.color.ListNotFilled);
+                holder.mIdView.setTextColor(Color.parseColor("#000000"));
+            }
 
 
             holder.itemView.setTag(Item);

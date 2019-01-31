@@ -43,6 +43,7 @@ import common.SweetFile;
 import ir.sweetsoft.ges.Exceptions.noSheetException;
 import ir.sweetsoft.ges.Model.Cow;
 import ir.sweetsoft.ges.Model.Herd;
+import ir.sweetsoft.ges.Model.HerdFile;
 import jxl.read.biff.BiffException;
 
 public class CowManActivity extends BaseFileUsageActivity {
@@ -51,11 +52,9 @@ public class CowManActivity extends BaseFileUsageActivity {
     protected float TopIconsMarginPercent=0.6f;
     protected ItemDetailFragment LastFragment=null;
     public static final String ARG_ITEM_ID = "item_id";
-    public static final String ARG_HERD_POSITION = "herd_id";
-    protected String SelectedHerdCode=null;
-    protected int SelectedHerdPosition=-1;
+    protected HerdFile SelectedHerdFile;
     protected ItemListActivity.SimpleItemRecyclerViewAdapter recyclerViewAdapter = null;
-    private Spinner HerdSelect;
+    private TextView HerdTitle;
     private TextView HerdSelectLabel;
     protected int ButtonSize=0;
 
@@ -86,6 +85,8 @@ public class CowManActivity extends BaseFileUsageActivity {
         super.onCreate(savedInstanceState);
         setContentView(DefaultLyout);
 
+        long herdFileID=getIntent().getLongExtra("herdfile_id",-1);
+        SelectedHerdFile=HerdFile.load(HerdFile.class,herdFileID);
         if(shouldAskPermission())
             requestFileAccessPermission(10);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
@@ -96,6 +97,8 @@ public class CowManActivity extends BaseFileUsageActivity {
         BtnAdd = (ImageView) findViewById(R.id.btn_add);
         BtnDelete = (ImageView) findViewById(R.id.btn_delete);
         BtnAboutUS = (ImageView) findViewById(R.id.btn_aboutus);
+        HerdSelectLabel = findViewById(R.id.lblHerdID);
+        HerdTitle = findViewById(R.id.lbl_HerdContent);
         SweetDisplayScaler scaler=new SweetDisplayScaler(this);
         ButtonSize=Math.min(scaler.HeightPercentToPixel(10),scaler.WidthPercentToPixel(10));
 //        int ImportHeights=Math.min(scaler.HeightPercentToPixel(10),scaler.WidthPercentToPixel(10));
@@ -111,6 +114,7 @@ public class CowManActivity extends BaseFileUsageActivity {
         BtnDelete.getLayoutParams().height=ButtonSize;
         BtnAboutUS.getLayoutParams().width=ButtonSize;
         BtnAboutUS.getLayoutParams().height=ButtonSize;
+
 
         ((RelativeLayout.LayoutParams)saver.getLayoutParams()).rightMargin=scaler.WidthPercentToPixel(TopIconsMarginPercent);
         ((RelativeLayout.LayoutParams)BtnExport.getLayoutParams()).rightMargin=scaler.WidthPercentToPixel(TopIconsMarginPercent);
@@ -153,10 +157,10 @@ public class CowManActivity extends BaseFileUsageActivity {
                 {
                     File AppDataPath=new File(Environment.getExternalStorageDirectory().getPath()+"/ArianDeltaGene/");
                     AppDataPath.mkdir();
-                    File ExportPath=new File(AppDataPath.getAbsolutePath()+"/"+SelectedHerdCode+"/");
+                    File ExportPath=new File(AppDataPath.getAbsolutePath()+"/"+SelectedHerdFile.Herd.Code+"/");
                     ExportPath.mkdir();
 
-                    new ExcelAdapter(CowManActivity.this).makeExcelFromHerd(SelectedHerdCode, ExportPath.getAbsolutePath()+"/"+ SweetDate.Date2String("-")+".xls");
+                    new ExcelAdapter(CowManActivity.this).makeExcelFromHerd(SelectedHerdFile, ExportPath.getAbsolutePath()+"/"+ SweetDate.Date2String("-")+"-"+SelectedHerdFile.Name+".xls");
 //                    if(AddedRows>0)
                         showAlert("Exported","Data Exported Successfully.",null,true);
 //                    else
@@ -187,9 +191,6 @@ public class CowManActivity extends BaseFileUsageActivity {
         toolbar.setTitle("");
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-
-        loadHerdSelect();
 //        toolbar.setTitle(getTitle());
         BtnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -199,22 +200,21 @@ public class CowManActivity extends BaseFileUsageActivity {
 //                        .setAction("Action", null).show();
             }
         });
+
+
+        HerdSelectLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX,scaler.WidthPercentToPixel(FontSizePercent));
+        HerdTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX,scaler.WidthPercentToPixel(FontSizePercent));
+        HerdTitle.setText(SelectedHerdFile.Herd.Code+ " - " +SelectedHerdFile.Name);
     }
+
     private void Add(Boolean ForceSaveLast)
     {
-        if(SelectedHerdCode==null || SelectedHerdCode.length()==0 || SelectedHerdCode.equals("+"))
-        {
-
-        }
-        else
-        {
-            LoadItem(BtnAdd,ForceSaveLast);
-        }
+       LoadItem(BtnAdd,ForceSaveLast);
     }
     protected void RefreshData()
     {
         LastFragment=null;
-        List<Cow> Cows=new Select().from(Cow.class).orderBy("code").where("herd_fid= ? AND is_filled=?",SelectedHerdCode,true).execute();
+        List<Cow> Cows=new Select().from(Cow.class).orderBy("code").where("herdfile_fid= ? AND is_filled=?",SelectedHerdFile.getId(),true).execute();
         for(Cow theCow:Cows)
             theCow.clear();
         refreshCowList();
@@ -225,7 +225,7 @@ public class CowManActivity extends BaseFileUsageActivity {
     {
         try
         {
-            int AddedRows=new ExcelAdapter(CowManActivity.this).importDataExcel(SelectedHerdCode, Path);
+            int AddedRows=new ExcelAdapter(CowManActivity.this).importDataExcel(SelectedHerdFile,getHeifer(), Path);
             if(AddedRows>0)
                 showAlert("Imported","Data imported successfully.",null,true);
             refreshCowList();
@@ -282,98 +282,10 @@ public class CowManActivity extends BaseFileUsageActivity {
 
 
     }
-    private void loadHerdSelect()
-    {
-        final SweetDisplayScaler scaler=new SweetDisplayScaler(this);
-        HerdSelect = findViewById(R.id.herdselect);
-        HerdSelectLabel = findViewById(R.id.lblHerdID);
-        HerdSelectLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX,scaler.WidthPercentToPixel(FontSizePercent));
-        List<String> HerdCodes = new ArrayList<>();
-        final List<Herd> Herds= new Select().from(Herd.class).execute();
-        for (Herd hrd:Herds) {
-            HerdCodes.add(hrd.Code);
-        }
-        HerdCodes.add("+");
-        Bundle arguments = new Bundle();
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, R.layout.spinner_item, HerdCodes)
-        {
-            public View getView(int position, View convertView,ViewGroup parent) {
-
-                View v = super.getView(position, convertView, parent);
-                ((TextView) v).setTextSize(TypedValue.COMPLEX_UNIT_PX,scaler.WidthPercentToPixel(FontSizePercent));
-                return v;
-
-            }
-
-            public View getDropDownView(int position, View convertView,ViewGroup parent) {
-
-                View v = super.getDropDownView(position, convertView,parent);
-                ((TextView) v).setTextSize(TypedValue.COMPLEX_UNIT_PX,scaler.WidthPercentToPixel(FontSizePercent));
-
-                return v;
-
-            }
-        };
-        dataAdapter.setDropDownViewResource(R.layout.spinner_dropdown);
-        HerdSelect.setAdapter(dataAdapter);
-            Integer HerdPosition=getIntent().getIntExtra(CowManActivity.ARG_HERD_POSITION,-1);
-            Log.d("HerdPOS",HerdPosition+"");
-            if(HerdPosition>0)
-                HerdSelect.setSelection(HerdPosition);
-
-        HerdSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
-                Log.d("Herd:",position+" "+Herds.size());
-                if(Herds.size()>0)
-                    LoadItem(HerdSelect,false);
-                if(position==Herds.size())
-                {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(CowManActivity.this);
-                    builder.setTitle("Please Insert Herd ID:");
-                    final EditText input = new EditText(CowManActivity.this);
-                    input.setInputType(InputType.TYPE_CLASS_TEXT);
-                    builder.setView(input);
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            String HerdID = input.getText().toString().toUpperCase().trim();
-                            Herd hd=new Herd();
-                            hd.Code=HerdID;
-                            hd.save();
-                            loadHerdSelect();
-                            HerdSelect.setSelection(position);
-                        }
-                    });
-                    builder.show();
-                }
-                else
-                {
-                    String theSelectedHerdCode = parent.getItemAtPosition(position).toString();
-//                    if(!Loading)
-                    {
-                        SelectedHerdCode=theSelectedHerdCode.toUpperCase().trim();
-                        refreshCowList();
-                    }
-//                    else
-//                        Loading=false;
-
-                }
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-    }
     protected List<Cow> getHerdCows()
     {
-        if(SelectedHerdCode==null)
-            return new ArrayList<Cow>();
-        List<Cow> Cows=new Select().from(Cow.class).orderBy("code").where("herd_fid= ? AND isheifer = ?",SelectedHerdCode,getHeifer()).execute();
+        List<Cow> Cows=new Select().from(Cow.class).orderBy("code").where("herdfile_fid= ? AND isheifer = ?",SelectedHerdFile.getId(),getHeifer()).execute();
         return Cows;
     }
     public void refreshCowList()
@@ -418,7 +330,6 @@ public class CowManActivity extends BaseFileUsageActivity {
                 Context context = view.getContext();
                 Intent intent = new Intent(context, ItemDetailActivity.class);
                 intent.putExtra(CowManActivity.ARG_ITEM_ID, ItemID);
-                intent.putExtra(CowManActivity.ARG_HERD_POSITION, HerdSelect.getSelectedItemPosition());
                 context.startActivity(intent);
 
 
