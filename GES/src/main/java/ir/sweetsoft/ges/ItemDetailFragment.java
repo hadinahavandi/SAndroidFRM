@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
@@ -44,11 +45,12 @@ public class ItemDetailFragment extends Fragment {
     private float FontSizePercent=3.5f;
     private float MediumFontSizePercent=2.0f;
     private float SmallFontSizePercent=2.5f;
-    private float CodeFontSizePercent=3.5f;
+    private float CodeFontSizePercent=3.8f;
+    private float CharacterImageSizePercent=4;
     private float ItemWidthPercent=15;
     private float ItemLabelPercent=10;
-    private float CodeWidthPercent=18;
-    private float CodeLabelPercent=16;
+    private float CodeWidthPercent=28;
+    private float CodeLabelPercent=18;
 
     private EditText txt_Code;
     private EditText txt_Description;
@@ -75,6 +77,7 @@ public class ItemDetailFragment extends Fragment {
     private RowView Row_tp;
     private RowView Row_tl;
     private RowView Row_rtp;
+    ImageView CharacterImage;
     TextView[] Labels;
     EditText[] Inputs;
     RelativeLayout[] Columns;
@@ -98,11 +101,14 @@ public class ItemDetailFragment extends Fragment {
     private Integer getEditTextInt(EditText view) {
         return Integer.parseInt(view.getText().toString().equals("") ? "-1" : view.getText().toString());
     }
-    private Integer getEditTextIntAndCheck(EditText view) throws InvalidInputException {
+    private Integer getEditTextIntAndCheck(EditText view,int MinValue,int MaxValue) throws InvalidInputException {
         int Value = getEditTextInt(view);
-        if (Value > 0 && (Value < 5 || Value > 100))
-            throw new InvalidInputException("Invalid Input Data,Numbers Should be between 5 and 100", view.getId() + "");
+        if (Value > 0 && (Value < MinValue || Value > MaxValue))
+            throw new InvalidInputException("Invalid Input Data,Numbers Should be between 5 and 99 and LS Should be between 1 and 19 ", view.getId() + "");
         return Value;
+    }
+    private Integer getEditTextIntAndCheck(EditText view) throws InvalidInputException {
+        return  getEditTextIntAndCheck(view,5,99);
     }
     public void Save(Boolean ForceSave) throws InvalidInputException {
         Log.d("Saving", "Start");
@@ -123,7 +129,7 @@ public class ItemDetailFragment extends Fragment {
         else if(CowCode.trim().length()>0) {
             Log.d("Saving", "hi"+getEditTextIntAndCheck(Row_st.getInput()));
             mItem.HerdFile = FragmentHerdFile;
-            mItem.ls = getEditTextIntAndCheck(Row_ls.getInput());
+            mItem.ls = getEditTextIntAndCheck(Row_ls.getInput(),1,19);
             mItem.st = getEditTextIntAndCheck(Row_st.getInput());
             mItem.sr = getEditTextIntAndCheck(Row_sr.getInput());
             mItem.bd = getEditTextIntAndCheck(Row_bd.getInput());
@@ -150,10 +156,10 @@ public class ItemDetailFragment extends Fragment {
             Log.d("Saving", "hiss");
             mItem.IsHeifer = FragmentIsHeifer;
             Log.d("Saving", "his");
-            mItem.CowCode = Integer.parseInt(CowCode);
+            mItem.CowCode = CowCode;
             Log.d("Saving", "him");
             Log.d("Saving", "Complating"+mItem.CowCode);
-            if (mItem.CowCode > 0)
+            if (mItem.CowCode.length() > 0)
                 mItem.SaveData();
             CowManActivity activity = (CowManActivity) this.getActivity();
             activity.LastFragment = null;
@@ -218,6 +224,7 @@ public class ItemDetailFragment extends Fragment {
         Columns[1] = (RelativeLayout)rootView.findViewById(R.id.column2);
         Columns[2] = (RelativeLayout)rootView.findViewById(R.id.column3);
         txt_Code=(EditText)rootView.findViewById(R.id.item_txt_code) ;
+        CharacterImage=rootView.findViewById(R.id.character) ;
         lbl_Code=(TextView) rootView.findViewById(R.id.item_lbl_code) ;
         txt_Description=(EditText)rootView.findViewById(R.id.txt_description) ;
         lbl_Description=(TextView) rootView.findViewById(R.id.lbl_description) ;
@@ -269,7 +276,16 @@ public class ItemDetailFragment extends Fragment {
 
         SweetDisplayScaler scaler=new SweetDisplayScaler(getActivity());
         txt_Code.getLayoutParams().width=scaler.WidthPercentToPixel(CodeWidthPercent);
-        txt_Code.setBackgroundResource(R.drawable.secondedittext);
+        txt_Code.setBackgroundResource(R.drawable.forthedittext);
+        txt_Code.setInputType(InputType.TYPE_CLASS_NUMBER);
+        CharacterImage.getLayoutParams().width=scaler.WidthPercentToPixel(CharacterImageSizePercent);
+        CharacterImage.getLayoutParams().height=scaler.WidthPercentToPixel(CharacterImageSizePercent);
+        CharacterImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txt_Code.setInputType(InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
+            }
+        });
         txt_Code.setTextSize(TypedValue.COMPLEX_UNIT_PX,scaler.WidthPercentToPixel(CodeFontSizePercent));
         lbl_Code.getLayoutParams().width=scaler.WidthPercentToPixel(CodeLabelPercent);
         lbl_Code.setTextSize(TypedValue.COMPLEX_UNIT_PX,scaler.WidthPercentToPixel(CodeFontSizePercent));
@@ -320,7 +336,10 @@ public class ItemDetailFragment extends Fragment {
             Row_sire.setFilters(7,0,9999999);
             Row_mgs.setFilters(7,0,9999999);
             Row_mmgs.setFilters(7,0,9999999);
+        Row_ls.setFilters(2,1,19);
             Row_sire.getInput().setBackgroundResource(R.drawable.secondedittext);
+
+        Row_ls.getInput().setBackgroundResource(R.drawable.thirdedittext);
         Row_mgs.getInput().setBackgroundResource(R.drawable.secondedittext);
         Row_mmgs.getInput().setBackgroundResource(R.drawable.secondedittext);
         Row_sire.getLabel().setTextSize(TypedValue.COMPLEX_UNIT_PX,scaler.WidthPercentToPixel(MediumFontSizePercent));

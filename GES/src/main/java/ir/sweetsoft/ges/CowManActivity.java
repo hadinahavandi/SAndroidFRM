@@ -56,6 +56,7 @@ public class CowManActivity extends BaseFileUsageActivity {
     protected ItemListActivity.SimpleItemRecyclerViewAdapter recyclerViewAdapter = null;
     private TextView HerdTitle;
     private TextView HerdSelectLabel;
+    private TextView CowCountLabel;
     protected int ButtonSize=0;
 
     public Boolean getHeifer() {
@@ -98,6 +99,8 @@ public class CowManActivity extends BaseFileUsageActivity {
         BtnDelete = (ImageView) findViewById(R.id.btn_delete);
         BtnAboutUS = (ImageView) findViewById(R.id.btn_aboutus);
         HerdSelectLabel = findViewById(R.id.lblHerdID);
+        CowCountLabel = findViewById(R.id.cowcount);
+
         HerdTitle = findViewById(R.id.lbl_HerdContent);
         SweetDisplayScaler scaler=new SweetDisplayScaler(this);
         ButtonSize=Math.min(scaler.HeightPercentToPixel(10),scaler.WidthPercentToPixel(10));
@@ -160,7 +163,7 @@ public class CowManActivity extends BaseFileUsageActivity {
                     File ExportPath=new File(AppDataPath.getAbsolutePath()+"/"+SelectedHerdFile.Herd.Code+"/");
                     ExportPath.mkdir();
 
-                    new ExcelAdapter(CowManActivity.this).makeExcelFromHerd(SelectedHerdFile, ExportPath.getAbsolutePath()+"/"+ SweetDate.Date2String("-")+"-"+SelectedHerdFile.Name+".xls");
+                    new ExcelAdapter(CowManActivity.this).makeExcelFromHerd(SelectedHerdFile, ExportPath.getAbsolutePath()+"/"+ SweetDate.Date2String("-")+".xls");
 //                    if(AddedRows>0)
                         showAlert("Exported","Data Exported Successfully.",null,true);
 //                    else
@@ -202,9 +205,12 @@ public class CowManActivity extends BaseFileUsageActivity {
         });
 
 
+        CowCountLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX,scaler.WidthPercentToPixel(FontSizePercent));
         HerdSelectLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX,scaler.WidthPercentToPixel(FontSizePercent));
         HerdTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX,scaler.WidthPercentToPixel(FontSizePercent));
-        HerdTitle.setText(SelectedHerdFile.Herd.Code+ " - " +SelectedHerdFile.Name);
+        HerdTitle.setText(SelectedHerdFile.Herd.Code);
+
+        CowCountLabel.setText(getHerdCows()==null?"0":getHerdCows().size()+"");
     }
 
     private void Add(Boolean ForceSaveLast)
@@ -295,6 +301,7 @@ public class CowManActivity extends BaseFileUsageActivity {
         {
             Log.d("Refreshing","Inside");
             Log.d("Refreshing",getHerdCows().size()+"");
+            CowCountLabel.setText(getHerdCows()==null?"0":getHerdCows().size()+"");
             recyclerViewAdapter.setDataset(getHerdCows());
             recyclerViewAdapter.notifyDataSetChanged();
         }

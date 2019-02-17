@@ -9,4 +9,5 @@
 
     <color name="background_color">#051a23</color>
     <color name="field_color">#195169</color>
+    <color name="button_color">#057db1</color>
 </resources>

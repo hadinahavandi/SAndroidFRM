@@ -33,11 +33,15 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:visibility="gone"/>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/isHeiferSelect">
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btn_heifer"
-            android:layout_centerHorizontal="true"
+            android:layout_alignParentLeft="true"
             android:src="@drawable/btn_heifer"
             android:layout_centerVertical="true"
             android:visibility="gone"/>
@@ -46,8 +50,21 @@
             android:layout_height="wrap_content"
             android:id="@+id/btn_cow"
             android:src="@drawable/btn_cow"
-            android:layout_centerHorizontal="true"
+            android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"/>
+        </RelativeLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@+id/isHeiferSelect"
+            android:id="@+id/cowcount"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:gravity="center"
+            />
     </RelativeLayout>
     <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -61,6 +78,7 @@
 
 
     </LinearLayout>
+
     <FrameLayout
         android:id="@+id/item_detail_container"
         android:layout_width="0dp"

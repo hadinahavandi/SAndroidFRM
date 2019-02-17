@@ -11,7 +11,7 @@ public class Cow extends Model {
     @Column(name = "herdfile_fid", index = true,onDelete = Column.ForeignKeyAction.CASCADE)
     public HerdFile HerdFile;
     @Column(name = "code", index = true,notNull = true)
-    public int CowCode;
+    public String CowCode;
     @Column(name = "sire")
     public String sire="";
     @Column(name = "mgs")

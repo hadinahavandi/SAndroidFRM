@@ -2,9 +2,13 @@
 <resources>
     <color name="colorPrimary">#165874</color>
     <color name="colorPrimaryDark">#051a23</color>
-    <color name="colorAccent">#4eb1e2</color>
-    <color name="ListFilled">#009cff</color>
-    <color name="SecondFieldBGcolor">#009cff</color>
+    <color name="colorAccent">#ff3333</color>
+    <color name="ListFilled">#007ac7</color>
+    <color name="SecondFieldBGcolor">#008be4</color>
     <color name="SecondFieldStrokecolor">#006fb6</color>
+    <color name="ThirdFieldBGcolor">#16bf22</color>
+    <color name="ThirdFieldStrokecolor">#0f8017</color>
+    <color name="FourthFieldBGcolor">#ffe500</color>
+    <color name="FourthFieldStrokecolor">#a46d00</color>
     <color name="ListNotFilled">#e4e4e4</color>
 </resources>

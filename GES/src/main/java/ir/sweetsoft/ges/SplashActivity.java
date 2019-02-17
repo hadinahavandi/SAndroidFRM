@@ -30,15 +30,15 @@ public class SplashActivity extends BaseAppCompatActivity {
         SweetDisplayScaler scaler=new SweetDisplayScaler(this);
         imgLogo.getLayoutParams().width=scaler.WidthPercentToPixel(70);
         List<Cow> Cows=new Select().from(Cow.class).execute();
-        if(Cows!=null && Cows.size()>200)
-        {
-            showAlert("Expired", "Your Demo Version Is Expired,Please Contact the Developer.", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    SplashActivity.this.finish();
-                }
-            },false);
-        }
+//        if(Cows!=null && Cows.size()>200)
+//        {
+//            showAlert("Expired", "Your Demo Version Is Expired,Please Contact the Developer.", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    SplashActivity.this.finish();
+//                }
+//            },false);
+//        }
 //        imgLogo.getLayoutParams().width=scaler.WidthPercentToPixel(50);
         new Handler().postDelayed(new Runnable() {
 

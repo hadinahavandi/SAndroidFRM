@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="40dp"
-            android:src="@drawable/bg"
+            android:src="@drawable/altagpsbg"
             android:layout_gravity="center"
             android:layout_centerHorizontal="true"/>
     <include layout="@layout/item_list" />

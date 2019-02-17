@@ -25,8 +25,30 @@ public class HerdFileActivity extends BaseBtnManageActivity {
         long herdID=getIntent().getLongExtra("herd_id",-1);
         theHerd=Herd.load(Herd.class,herdID);
         Log.d("HerdID",herdID+"");
-        ReloadItems();
+        createAndSendToMainActivity();
+//        ReloadItems();
         setPageTitle("Files of Herd "+theHerd.Code+" :");
+    }
+    private void createAndSendToMainActivity()
+    {
+        List<HerdFile> HerdFiles=new Select().from(HerdFile.class).where("herd_fid = ?",theHerd.getId()).execute();
+        HerdFile theHerdFile;
+        if(HerdFiles==null || HerdFiles.isEmpty())
+        {
+            theHerdFile=AddHerdFile("defaultFile");
+        }
+        else
+            theHerdFile=HerdFiles.get(0);
+        RedirectToNextActivity(theHerdFile);
+
+    }
+    private void RedirectToNextActivity(HerdFile theHerdFile)
+    {
+        Bundle theBundle=new Bundle();
+        theBundle.putLong("herdfile_id",theHerdFile.getId());
+        Intent thePathIntent=new Intent(this,ItemListActivity.class);
+        thePathIntent.putExtras(theBundle);
+        startActivity(thePathIntent);
     }
     @Override
     protected void AddItem()
@@ -39,11 +61,7 @@ public class HerdFileActivity extends BaseBtnManageActivity {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String HerdFileName = input.getText().toString().toUpperCase().trim();
-                HerdFile hdf=new HerdFile();
-                hdf.Name=HerdFileName;
-                hdf.Herd=theHerd;
-                hdf.save();
+                AddHerdFile(input.getText().toString());
                 ReloadItems();
             }
         });
@@ -56,6 +74,15 @@ public class HerdFileActivity extends BaseBtnManageActivity {
         hdf.delete();
         ReloadItems();
     }
+    private HerdFile AddHerdFile(String Name)
+    {
+        String HerdFileName = Name.toUpperCase().trim();
+        HerdFile hdf=new HerdFile();
+        hdf.Name=HerdFileName;
+        hdf.Herd=theHerd;
+        hdf.save();
+        return hdf;
+    }
     @Override
     protected void ReloadItems()
     {
@@ -67,7 +94,6 @@ public class HerdFileActivity extends BaseBtnManageActivity {
             Intent i=new Intent(this,ItemListActivity.class);
             for(final HerdFile theHerdFile:HerdFiles)
             {
-                String HerdCode=getIntent().getStringExtra("herdcode");
                 Bundle bdl=new Bundle();
                 bdl.putLong("herdfile_id",theHerdFile.getId());
                 AddItem(theHerdFile.getId(),theHerdFile.Name+" ",i,bdl);

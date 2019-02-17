@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.activeandroid.query.Select;
 
@@ -20,6 +21,8 @@ public class HerdActivity extends BaseBtnManageActivity {
         super.onCreate(savedInstanceState);
         ReloadItems();
         setPageTitle("Herds List: ");
+        ImageView bg=findViewById(R.id.bg);
+
     }
     @Override
     protected void DeleteItem(Long ItemID)
