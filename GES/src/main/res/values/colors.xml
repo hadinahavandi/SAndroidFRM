@@ -10,5 +10,7 @@
     <color name="ThirdFieldStrokecolor">#0f8017</color>
     <color name="FourthFieldBGcolor">#ffe500</color>
     <color name="FourthFieldStrokecolor">#a46d00</color>
+    <color name="FifthFieldBGcolor">#00d2a5</color>
+    <color name="FifthFieldStrokecolor">#00585c</color>
     <color name="ListNotFilled">#e4e4e4</color>
 </resources>

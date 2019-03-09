@@ -28,7 +28,10 @@ public class RowView extends RelativeLayout {
     private EditText Input;
 
     public void setFilters(int maxInputLength,int minInputValue,int maxInputValue) {
+        if(maxInputValue>0 && minInputValue>0)
         Input.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxInputLength),new MinMaxInputFilter(minInputValue, maxInputValue)});
+        else
+            Input.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxInputLength)});
     }
     public RowView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);

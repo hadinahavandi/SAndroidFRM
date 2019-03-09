@@ -29,10 +29,11 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="No item exists,Please add an item using add button."
-        android:textSize="25sp"
+        android:textSize="27sp"
+        android:textStyle="bold"
         android:id="@+id/lbl_noItemExists"
         android:layout_centerInParent="true"
-        android:textColor="#555555"/>
+        android:textColor="#000000"/>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

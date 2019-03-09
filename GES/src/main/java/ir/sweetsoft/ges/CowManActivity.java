@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -111,8 +112,8 @@ public class CowManActivity extends BaseFileUsageActivity {
         BtnExport.getLayoutParams().height=ButtonSize;
         BtnImport.getLayoutParams().width=ButtonSize;
         BtnImport.getLayoutParams().height=ButtonSize;
-        BtnAdd.getLayoutParams().width=ButtonSize;
-        BtnAdd.getLayoutParams().height=ButtonSize;
+        BtnAdd.getLayoutParams().width=(int)(ButtonSize*1.7);
+        BtnAdd.getLayoutParams().height=(int)(ButtonSize*1.7);
         BtnDelete.getLayoutParams().width=ButtonSize;
         BtnDelete.getLayoutParams().height=ButtonSize;
         BtnAboutUS.getLayoutParams().width=ButtonSize;
@@ -122,7 +123,7 @@ public class CowManActivity extends BaseFileUsageActivity {
         ((RelativeLayout.LayoutParams)saver.getLayoutParams()).rightMargin=scaler.WidthPercentToPixel(TopIconsMarginPercent);
         ((RelativeLayout.LayoutParams)BtnExport.getLayoutParams()).rightMargin=scaler.WidthPercentToPixel(TopIconsMarginPercent);
         ((RelativeLayout.LayoutParams)BtnImport.getLayoutParams()).rightMargin=scaler.WidthPercentToPixel(TopIconsMarginPercent);
-        ((RelativeLayout.LayoutParams)BtnAdd.getLayoutParams()).rightMargin=scaler.WidthPercentToPixel(TopIconsMarginPercent);
+        ((RelativeLayout.LayoutParams)BtnAdd.getLayoutParams()).rightMargin=scaler.WidthPercentToPixel(TopIconsMarginPercent*4);
         ((RelativeLayout.LayoutParams)BtnDelete.getLayoutParams()).rightMargin=scaler.WidthPercentToPixel(TopIconsMarginPercent);
         ((RelativeLayout.LayoutParams)BtnAboutUS.getLayoutParams()).rightMargin=scaler.WidthPercentToPixel(TopIconsMarginPercent);
         saver.setOnClickListener(new View.OnClickListener() {
@@ -164,8 +165,11 @@ public class CowManActivity extends BaseFileUsageActivity {
                     ExportPath.mkdir();
 
                     new ExcelAdapter(CowManActivity.this).makeExcelFromHerd(SelectedHerdFile, ExportPath.getAbsolutePath()+"/"+ SweetDate.Date2String("-")+".xls");
+
 //                    if(AddedRows>0)
                         showAlert("Exported","Data Exported Successfully.",null,true);
+                    MediaScannerConnection.scanFile(CowManActivity.this, new String[] {ExportPath.getAbsolutePath()}, null, null);
+
 //                    else
 //                        showAlert("No Data","There is no cow in this herd.",null,true);
                 }
@@ -220,7 +224,7 @@ public class CowManActivity extends BaseFileUsageActivity {
     protected void RefreshData()
     {
         LastFragment=null;
-        List<Cow> Cows=new Select().from(Cow.class).orderBy("code").where("herdfile_fid= ? AND is_filled=?",SelectedHerdFile.getId(),true).execute();
+        List<Cow> Cows=new Select().from(Cow.class).orderBy("codeint").where("herdfile_fid= ? AND is_filled=?",SelectedHerdFile.getId(),true).execute();
         for(Cow theCow:Cows)
             theCow.clear();
         refreshCowList();
@@ -291,7 +295,7 @@ public class CowManActivity extends BaseFileUsageActivity {
 
     protected List<Cow> getHerdCows()
     {
-        List<Cow> Cows=new Select().from(Cow.class).orderBy("code").where("herdfile_fid= ? AND isheifer = ?",SelectedHerdFile.getId(),getHeifer()).execute();
+        List<Cow> Cows=new Select().from(Cow.class).orderBy("codeint").where("herdfile_fid= ? AND isheifer = ?",SelectedHerdFile.getId(),getHeifer()).execute();
         return Cows;
     }
     public void refreshCowList()

@@ -2,6 +2,7 @@ package ir.sweetsoft.ges;
 
 import android.app.Activity;
 import android.database.sqlite.SQLiteConstraintException;
+import android.media.MediaScannerConnection;
 import android.text.format.DateFormat;
 import android.util.Log;
 
@@ -52,7 +53,7 @@ public class ExcelAdapter {
     }
     private WritableWorkbook createExcelSheet(WritableWorkbook workbook,HerdFile theHerdFile,Boolean isFilled,Boolean isHeifer,int SheetNumber) throws Exception
     {
-        List<Cow> Cows=new Select().from(Cow.class).orderBy("code").where("herdfile_fid= ? AND is_filled= ? AND isheifer= ?",theHerdFile.getId(),isFilled,isHeifer).execute();
+        List<Cow> Cows=new Select().from(Cow.class).orderBy("codeint").where("herdfile_fid= ? AND is_filled= ? AND isheifer= ?",theHerdFile.getId(),isFilled,isHeifer).execute();
         int StartRow=0;
         String SheetName="Herd "+theHerdFile.Herd.Code;
         if(isFilled)
@@ -88,7 +89,8 @@ public class ExcelAdapter {
             String[] HeiferItems={(CowIndex+1)+"",theCow.CowCode+"",theCow.sire,theCow.mgs,theCow.mmgs
                     ,theCow.st+"",theCow.sr+"",theCow.bd+"",theCow.df+"",theCow.ra+"",theCow.rw+"",theCow.sv+""
                     ,theCow.rv+"",theCow.fa+"",theCow.Description+""};
-            String[] Items=isHeifer?HeiferItems:CowItems;
+//            String[] Items=isHeifer?HeiferItems:CowItems;
+            String[] Items=CowItems;
             //Label[] ItemLables=new Label[Items.length];
 
             theSheet.mergeCells(Items.length-1,StartRow+CowIndex,Items.length+5,StartRow+CowIndex);//Comment Part
@@ -96,6 +98,8 @@ public class ExcelAdapter {
             {
                 if(Items[i].equals("-1"))
                     Items[i]="-99";
+                if(Items[i].equals("-10"))// Just for LS
+                    Items[i]="";
 //                NumberFormat decimalNo = new NumberFormat("#.0");
 //                WritableCellFormat numberFormat = new WritableCellFormat(decimalNo);
                 try
@@ -138,7 +142,8 @@ public class ExcelAdapter {
     private int AddTitles(WritableSheet theXLSheet,int StartRow,Boolean isHeifer) throws Exception
     {
         String[] CowTitles={"#","Cow ID","Sire","M.G.S","M.M.G.S","LS","ST","SR","BD","DF","RA","RW","SV","RV","FA","FU","UH","UW","UC","UD","FTP","TL","RTP","Comments"};
-        String[] HeiferTitles={"#","Heifer ID","Sire","M.G.S","M.M.G.S","ST","SR","BD","DF","RA","RW","SV","RV","FA","Comments"};
+//        String[] HeiferTitles={"#","Heifer ID","Sire","M.G.S","M.M.G.S","ST","SR","BD","DF","RA","RW","SV","RV","FA","Comments"};
+        String[] HeiferTitles={"#","Heifer ID","Sire","M.G.S","M.M.G.S","LS","ST","SR","BD","DF","RA","RW","SV","RV","FA","FU","UH","UW","UC","UD","FTP","TL","RTP","Comments"};
         String[] Titles=isHeifer?HeiferTitles:CowTitles;
         Label[] TitleLables=new Label[Titles.length];
         theXLSheet.mergeCells(Titles.length-1,StartRow,Titles.length+5,StartRow);//Comment Part

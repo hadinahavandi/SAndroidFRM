@@ -84,30 +84,80 @@
         android:layout_weight="1"/>
 
 </LinearLayout>
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/lbl_description"
-            android:text="Comments:"
-            android:layout_marginTop="10dp"
-            android:layout_below="@id/columns"
-            android:textColor="#000000"
-            android:layout_alignParentLeft="true"/>
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="3dp"
-            android:layout_below="@id/columns"
-            android:background="@drawable/edittext"
-            android:id="@+id/txt_description"
-            android:layout_alignParentRight="true"
-            android:textColor="#fff"
-            android:gravity="left"
-            android:padding="4dp"
-            android:layout_marginTop="10dp"
-            android:layout_toRightOf="@id/lbl_description"
+            android:orientation="horizontal"
+            android:layout_below="@+id/columns"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="@dimen/margin_between_rows"
+            android:id="@+id/ButtomColumns"
+            android:weightSum="2">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <ir.sweetsoft.ges.RowView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/sire">
+                </ir.sweetsoft.ges.RowView>
+                <ir.sweetsoft.ges.RowView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/sire"
+                    android:layout_marginTop="@dimen/margin_between_rows"
+                    android:id="@+id/mmgs">
+                </ir.sweetsoft.ges.RowView>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <ir.sweetsoft.ges.RowView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/mgs">
+                </ir.sweetsoft.ges.RowView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lbl_description"
+                    android:layout_below="@+id/mgs"
+                    android:padding="4dp"
+                    android:minEms="4"
+                    android:layout_marginTop="@dimen/margin_between_rows"
+                    android:text="Note"
+                    android:textColor="#000000"
+                    android:layout_alignParentLeft="true"/>
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_between_rows"
+                    android:background="@drawable/fifthedittext"
+                    android:id="@+id/txt_description"
+                    android:layout_below="@+id/mgs"
+                    android:layout_alignParentRight="true"
+                    android:textColor="#fff"
+                    android:gravity="left"
+                    android:layout_toRightOf="@+id/lbl_description"
+                    android:padding="4dp"
 
-            />
+                    />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="0dp"
+            android:layout_marginTop="0dp"
+            android:src="@drawable/altagpsbg"
+            android:layout_below="@id/ButtomColumns"
+            android:scaleType="fitStart"
+            android:adjustViewBounds="true"
+            android:layout_centerHorizontal="true"/>
         <!--<RelativeLayout-->
             <!--android:layout_width="wrap_content"-->
             <!--android:layout_height="wrap_content"-->

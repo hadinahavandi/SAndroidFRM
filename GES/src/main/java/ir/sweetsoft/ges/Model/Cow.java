@@ -6,11 +6,15 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
+import common.NumberContainerString;
+
 @Table(name = "cow")
 public class Cow extends Model {
     @Column(name = "herdfile_fid", index = true,onDelete = Column.ForeignKeyAction.CASCADE)
     public HerdFile HerdFile;
-    @Column(name = "code", index = true,notNull = true)
+    @Column(name = "codeint", index = true,notNull = true)
+    public Long CowCodeInt;
+    @Column(name = "code",notNull = true)
     public String CowCode;
     @Column(name = "sire")
     public String sire="";
@@ -19,7 +23,7 @@ public class Cow extends Model {
     @Column(name = "mmgs")
     public String mmgs="";
     @Column(name = "ls")
-    public Integer ls=-1;
+    public Integer ls=-10;
     @Column(name = "st")
     public Integer st=-1;
     @Column(name = "sr")
@@ -66,6 +70,11 @@ public class Cow extends Model {
     }
     public Long SaveData() {
         this.isFilled=getIsFilled();
+        NumberContainerString Str=new NumberContainerString(this.CowCode);
+        if(ls==-1)
+            ls=-10;
+        this.CowCodeInt=Str.getNumberLong();
+        Log.d("SavingData",this.CowCodeInt+"");
         Log.d("SavingData","OK");
         return save();
     }

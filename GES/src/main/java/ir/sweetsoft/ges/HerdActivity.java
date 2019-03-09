@@ -59,6 +59,7 @@ public class HerdActivity extends BaseBtnManageActivity {
         if(Herds!=null && Herds.size()>0) {
             lbl_noItemExists.setVisibility(View.GONE);
             Intent i = new Intent(this, HerdFileActivity.class);
+            i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY); // Adds the FLAG_ACTIVITY_NO_HISTORY flag
             for (final Herd theHerd : Herds) {
                 Bundle bdl = new Bundle();
                 bdl.putLong("herd_id", theHerd.getId());

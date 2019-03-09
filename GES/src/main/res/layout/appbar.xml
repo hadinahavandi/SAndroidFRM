@@ -25,12 +25,21 @@
                 android:layout_centerVertical="true"
                 android:visibility="gone"
                 android:id="@+id/save"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_aboutus"
+                android:src="@drawable/btn_aboutus"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_centerVertical="true"/>
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_delete"
                 android:src="@drawable/btn_delete"
-                android:layout_alignParentRight="true"
+                android:layout_toLeftOf="@id/btn_aboutus"
                 android:layout_marginRight="10dp"
                 android:layout_centerVertical="true"/>
             <ImageView
@@ -55,15 +64,7 @@
                 android:id="@+id/btn_add"
                 android:src="@drawable/btn_add"
                 android:layout_toLeftOf="@id/btn_import"
-                android:layout_marginRight="10dp"
-                android:layout_centerVertical="true"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/btn_aboutus"
-                android:src="@drawable/btn_aboutus"
-                android:layout_toLeftOf="@id/btn_add"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="40dp"
                 android:layout_centerVertical="true"/>
             <TextView
                 android:layout_width="wrap_content"

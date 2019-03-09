@@ -44,11 +44,13 @@ public class ItemDetailFragment extends Fragment {
 
     private float FontSizePercent=3.5f;
     private float MediumFontSizePercent=2.0f;
-    private float SmallFontSizePercent=2.5f;
+    private float SmallFontSizePercent=2.9f;
     private float CodeFontSizePercent=3.8f;
     private float CharacterImageSizePercent=4;
     private float ItemWidthPercent=15;
     private float ItemLabelPercent=10;
+    private float BigItemWidthPercent=25;
+    private float BigItemLabelPercent=11;
     private float CodeWidthPercent=28;
     private float CodeLabelPercent=18;
 
@@ -228,9 +230,9 @@ public class ItemDetailFragment extends Fragment {
         lbl_Code=(TextView) rootView.findViewById(R.id.item_lbl_code) ;
         txt_Description=(EditText)rootView.findViewById(R.id.txt_description) ;
         lbl_Description=(TextView) rootView.findViewById(R.id.lbl_description) ;
-        Row_sire=(RowView) inflater.inflate(R.layout.item_rowlayout,container,false);
-        Row_mgs=(RowView) inflater.inflate(R.layout.item_rowlayout,container,false);
-        Row_mmgs=(RowView) inflater.inflate(R.layout.item_rowlayout,container,false);
+        Row_sire=(RowView)rootView.findViewById(R.id.sire);
+        Row_mgs=(RowView)rootView.findViewById(R.id.mgs);
+        Row_mmgs=(RowView)rootView.findViewById(R.id.mmgs);
         Row_ls=(RowView) inflater.inflate(R.layout.item_rowlayout,container,false);
         Row_st=(RowView) inflater.inflate(R.layout.item_rowlayout,container,false);
         Row_sr=(RowView) inflater.inflate(R.layout.item_rowlayout,container,false);
@@ -291,7 +293,8 @@ public class ItemDetailFragment extends Fragment {
         lbl_Code.setTextSize(TypedValue.COMPLEX_UNIT_PX,scaler.WidthPercentToPixel(CodeFontSizePercent));
         txt_Description.setTextSize(TypedValue.COMPLEX_UNIT_PX,scaler.WidthPercentToPixel(FontSizePercent));
         lbl_Description.setTextSize(TypedValue.COMPLEX_UNIT_PX,scaler.WidthPercentToPixel(FontSizePercent));
-        RowView[] Rows={Row_st,Row_sr,Row_bd,Row_df,Row_ra,Row_rw,Row_sv,Row_rv,Row_fa,Row_fu,Row_uh,Row_uw,Row_uc,Row_ud,Row_tp,Row_tl,Row_rtp,Row_ls,Row_sire,Row_mgs,Row_mmgs};
+        RowView[] Rows={Row_st,Row_sr,Row_bd,Row_df,Row_ra,Row_rw,Row_sv,Row_rv,Row_fa,Row_fu,Row_uh,Row_uw,Row_uc,Row_ud,Row_tp,Row_tl,Row_rtp,Row_ls};
+
         int ColumnCount=3;
         for(int i=0;i<Rows.length;i=i+ColumnCount)
             for(int j=0;j<ColumnCount && i+j<Rows.length;j++) {
@@ -306,9 +309,9 @@ public class ItemDetailFragment extends Fragment {
                 ((RelativeLayout.LayoutParams) Rows[i + j].getLayoutParams()).topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics());
                 if (i > 0)
                     ((RelativeLayout.LayoutParams) Rows[i + j].getLayoutParams()).addRule(RelativeLayout.BELOW, Rows[i + j - ColumnCount].getId());
-                int EndOfMovingForward=Rows.length-4;//LS Sire MGS and MMGS
+                int EndOfMovingForward=Rows.length-1;//LS Sire MGS and MMGS
                 if(ContainerActivity.getHeifer())
-                    EndOfMovingForward=EndOfMovingForward-8;//Only Cow Fields
+                    EndOfMovingForward=EndOfMovingForward-5;//Only Cow Fields
                 if (i + j > 0 && i+j<EndOfMovingForward) {
                     final EditText CurrentField = Rows[i + j].getInput();
                     final EditText PreviousField = Rows[i + j - 1].getInput();
@@ -333,20 +336,38 @@ public class ItemDetailFragment extends Fragment {
                 }
             }
 
-            Row_sire.setFilters(7,0,9999999);
-            Row_mgs.setFilters(7,0,9999999);
-            Row_mmgs.setFilters(7,0,9999999);
+            Row_sire.setFilters(14,-1,-1);
+            Row_mgs.setFilters(14,-1,-1);
+            Row_mmgs.setFilters(14,-1,-1);
         Row_ls.setFilters(2,1,19);
             Row_sire.getInput().setBackgroundResource(R.drawable.secondedittext);
 
         Row_ls.getInput().setBackgroundResource(R.drawable.thirdedittext);
         Row_mgs.getInput().setBackgroundResource(R.drawable.secondedittext);
         Row_mmgs.getInput().setBackgroundResource(R.drawable.secondedittext);
-        Row_sire.getLabel().setTextSize(TypedValue.COMPLEX_UNIT_PX,scaler.WidthPercentToPixel(MediumFontSizePercent));
+
+        int padding_in_px = (int) (4 * getResources().getDisplayMetrics().density + 0.5f);
+        Row_ls.getInput().setPadding(padding_in_px,padding_in_px,padding_in_px,padding_in_px);
+        Row_mgs.getInput().setPadding(0,padding_in_px,0,padding_in_px);
+        Row_mmgs.getInput().setPadding(0,padding_in_px,0,padding_in_px);
+        Row_sire.getInput().setPadding(0,padding_in_px,0,padding_in_px);
+
+        Row_sire.getLabel().getLayoutParams().width = scaler.WidthPercentToPixel(BigItemLabelPercent);
+        Row_sire.getInput().getLayoutParams().width = scaler.WidthPercentToPixel(BigItemWidthPercent);
+        Row_mgs.getLabel().getLayoutParams().width = scaler.WidthPercentToPixel(BigItemLabelPercent);
+        Row_mgs.getInput().getLayoutParams().width = scaler.WidthPercentToPixel(BigItemWidthPercent);
+        Row_mmgs.getLabel().getLayoutParams().width = scaler.WidthPercentToPixel(BigItemLabelPercent);
+        Row_mmgs.getInput().getLayoutParams().width = scaler.WidthPercentToPixel(BigItemWidthPercent);
+        lbl_Description.getLayoutParams().width = scaler.WidthPercentToPixel(BigItemLabelPercent);
+        txt_Description.getLayoutParams().width = scaler.WidthPercentToPixel(BigItemWidthPercent);
+
+        lbl_Description.setTextSize(TypedValue.COMPLEX_UNIT_PX,scaler.WidthPercentToPixel(SmallFontSizePercent));
+        txt_Description.setTextSize(TypedValue.COMPLEX_UNIT_PX,scaler.WidthPercentToPixel(SmallFontSizePercent));
+        Row_sire.getLabel().setTextSize(TypedValue.COMPLEX_UNIT_PX,scaler.WidthPercentToPixel(SmallFontSizePercent));
         Row_sire.getInput().setTextSize(TypedValue.COMPLEX_UNIT_PX,scaler.WidthPercentToPixel(SmallFontSizePercent));
-        Row_mgs.getLabel().setTextSize(TypedValue.COMPLEX_UNIT_PX,scaler.WidthPercentToPixel(MediumFontSizePercent));
+        Row_mgs.getLabel().setTextSize(TypedValue.COMPLEX_UNIT_PX,scaler.WidthPercentToPixel(SmallFontSizePercent));
         Row_mgs.getInput().setTextSize(TypedValue.COMPLEX_UNIT_PX,scaler.WidthPercentToPixel(SmallFontSizePercent));
-        Row_mmgs.getLabel().setTextSize(TypedValue.COMPLEX_UNIT_PX,scaler.WidthPercentToPixel(MediumFontSizePercent));
+        Row_mmgs.getLabel().setTextSize(TypedValue.COMPLEX_UNIT_PX,scaler.WidthPercentToPixel(SmallFontSizePercent));
         Row_mmgs.getInput().setTextSize(TypedValue.COMPLEX_UNIT_PX,scaler.WidthPercentToPixel(SmallFontSizePercent));
         changeVisiblities();
         // Show the dummy content as text in a TextView.
@@ -357,7 +378,7 @@ public class ItemDetailFragment extends Fragment {
             Row_sire.getInput().setText(mItem.sire);
             Row_mgs.getInput().setText(mItem.mgs);
             Row_mmgs.getInput().setText(mItem.mmgs);
-            Row_ls.getInput().setText((mItem.ls == -1 ? "" : mItem.ls.toString()));
+            Row_ls.getInput().setText((mItem.ls == -10 ? "" : mItem.ls.toString()));
             Row_st.getInput().setText((mItem.st == -1 ? "" : mItem.st.toString()));
             Row_sr.getInput().setText((mItem.sr == -1 ? "" : mItem.sr.toString()));
             Row_bd.getInput().setText((mItem.bd == -1 ? "" : mItem.bd.toString()));
