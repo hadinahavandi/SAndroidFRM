@@ -286,6 +286,9 @@ public class ItemDetailFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 txt_Code.setInputType(InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
+                Row_sire.getInput().setInputType(InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
+                Row_mgs.getInput().setInputType(InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
+                Row_mmgs.getInput().setInputType(InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
             }
         });
         txt_Code.setTextSize(TypedValue.COMPLEX_UNIT_PX,scaler.WidthPercentToPixel(CodeFontSizePercent));

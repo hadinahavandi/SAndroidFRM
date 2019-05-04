@@ -66,13 +66,13 @@ public class ExcelAdapter {
         else
             SheetName+=" Cows";
         WritableSheet theSheet = workbook.createSheet(SheetName, SheetNumber);
-        theSheet.mergeCells(0,StartRow,1,StartRow);
+//        theSheet.mergeCells(2,StartRow,3,StartRow);
         Label HerdCode=new Label(0,StartRow,"Herd ID:");
         HerdCode.setCellFormat(getTitleFormat());
         theSheet.addCell(HerdCode);
 
-        theSheet.mergeCells(2,StartRow,4,StartRow);
-        Label HerdCodeContent=new Label(3,StartRow,theHerdFile.Herd.Code);
+//        theSheet.mergeCells(4,StartRow,6,StartRow);
+        Label HerdCodeContent=new Label(1,StartRow,theHerdFile.Herd.Code);
         HerdCodeContent.setCellFormat(getNormalFormat());
 
         theSheet.addCell(HerdCodeContent);
@@ -212,6 +212,13 @@ public class ExcelAdapter {
                             cow.mgs=RowsCols[3].getContents().trim().toUpperCase();
                         if(RowsCols.length>4)
                             cow.mmgs=RowsCols[4].getContents().trim().toUpperCase();
+                        try
+                        {
+
+                            if(RowsCols.length>5)
+                                cow.ls=Integer.parseInt(RowsCols[5].getContents().trim().toUpperCase());
+                        }
+                        catch (Exception ex){ex.printStackTrace();};
                         cow.IsHeifer=isHeifer;
                         cow.SaveData();
                         AddedRows++;

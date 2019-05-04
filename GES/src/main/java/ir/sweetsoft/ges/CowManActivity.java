@@ -164,7 +164,7 @@ public class CowManActivity extends BaseFileUsageActivity {
                     File ExportPath=new File(AppDataPath.getAbsolutePath()+"/"+SelectedHerdFile.Herd.Code+"/");
                     ExportPath.mkdir();
 
-                    new ExcelAdapter(CowManActivity.this).makeExcelFromHerd(SelectedHerdFile, ExportPath.getAbsolutePath()+"/"+ SweetDate.Date2String("-")+".xls");
+                    new ExcelAdapter(CowManActivity.this).makeExcelFromHerd(SelectedHerdFile, ExportPath.getAbsolutePath()+"/"+SelectedHerdFile.Herd.Code+"-"+ SweetDate.Date2String("-")+".xls");
 
 //                    if(AddedRows>0)
                         showAlert("Exported","Data Exported Successfully.",null,true);
