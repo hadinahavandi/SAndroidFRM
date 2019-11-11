@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="16dp">
+
+    <!-- TODO: Update blank fragment layout -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+        <TextView
+            android:id="@+id/lblname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:text="نام ویزیتور"
+            style="@style/edittextlabel"/>
+        <EditText
+            android:id="@+id/txtname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/lblname"
+            style="@style/edittext"
+            android:maxLines="1"
+            android:inputType="text"
+            />
+        <TextView
+            android:id="@+id/lblcustomer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/txtname"
+            android:text="مشتری"
+            style="@style/edittextlabel"/>
+        <EditText
+            android:id="@+id/txtcustomer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/lblcustomer"
+            style="@style/edittext"
+            android:maxLines="1"
+            android:inputType="text"
+            android:enabled="false"
+            />
+        <TextView
+            android:id="@+id/lbldescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/txtcustomer"
+            android:text="توضیحات"
+            android:visibility="gone"
+            style="@style/edittextlabel"/>
+        <EditText
+            android:id="@+id/txtdescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/lbldescription"
+            style="@style/edittext"
+            android:visibility="gone"
+            />
+        <Button
+            android:id="@+id/btnsave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ذخیره"
+            android:layout_below="@+id/txtdescription"
+            style="@style/button"/>
+
+        <Button
+            android:id="@+id/btnprint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="چاپ"
+            style="@style/button"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list"
+            android:name="ir.sweetsoft.orderapp.ui.productManageFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_below="@+id/btnsave"
+            android:layout_above="@+id/btnprint"
+            app:layoutManager="LinearLayoutManager"
+            tools:context=".ui.product.factorManageFragment"
+            tools:listitem="@layout/fragment_factorproduct"/>
+
+    </RelativeLayout>
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@drawable/btn_add" />
+</RelativeLayout>

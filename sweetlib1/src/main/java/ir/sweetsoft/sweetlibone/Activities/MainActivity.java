@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import common.BaseFragmentActivity;
 import ir.sweetsoft.sweetlibone.R;
 import layout.AboutDeveloperFragment;
 import layout.AboutUsFragment;
@@ -45,7 +46,7 @@ import layout.SignupFragment;
 import layout.SignupMenuFragment;
 import ocms.SpecialityFragment;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends BaseFragmentActivity
         implements NavigationView.OnNavigationItemSelectedListener
         , LoginFragment.OnFragmentInteractionListener
         , SignupFragment.OnFragmentInteractionListener {
@@ -69,8 +70,6 @@ public class MainActivity extends AppCompatActivity
     private static final String MEDIA = "media";
     private static final int LOCAL_AUDIO = 1;
     private static final int LOCAL_VIDEO = 4;
-    private Fragment lastFragment=null;
-    private Stack<Class> FragmentCallList;
     private TextView titleBar;
     public WebView mainWebView;
     private boolean SharedConf_hasWebView=true;
@@ -131,7 +130,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FragmentCallList=new Stack<>();
         if(LayoutID<0)
             LayoutID=ir.sweetsoft.sweetlibone.R.layout.activity_main;
 
@@ -210,6 +208,10 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    public int getMainContentID()
+    {
+        return R.id.MainContent;
+    }
     public void routeToIndex()
     {
         String UserName= getSharedPreferences(Constants.GENERAL_PREFERENCES, Context.MODE_PRIVATE).getString(Constants.USERNAME,"0");
@@ -224,42 +226,6 @@ public class MainActivity extends AppCompatActivity
             showFragment(MenuFragment.class);
 
         setNavigationDrawerLockState(DrawerLayout.LOCK_MODE_UNLOCKED);
-    }
-    public void hideLastFragment()
-    {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            if(lastFragment!=null)
-                fragmentManager.beginTransaction().remove(lastFragment).commit();
-        lastFragment=null;
-
-    }
-    public Fragment showFragment(Class FragmentClass)
-    {
-       return showFragment(FragmentClass,true);
-    }
-    public Fragment showFragment(Class FragmentClass,boolean addToHistory)
-    {
-        try {
-            Log.d("Displaying Fragment",FragmentClass.toString());
-            Fragment fragment = (Fragment) FragmentClass.newInstance();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-
-            if(lastFragment!=null)
-            {
-                fragmentManager.beginTransaction().remove(lastFragment).commit();
-                if(addToHistory)
-                    FragmentCallList.push(lastFragment.getClass());
-            }
-            fragmentManager.beginTransaction().replace(R.id.MainContent, fragment).commit();
-            lastFragment=fragment;
-            return  fragment;
-
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
     @Override
     public void onBackPressed() {
@@ -289,6 +255,7 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -317,25 +284,5 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    protected boolean shouldAskPermission() {
-        return (Build.VERSION.SDK_INT > 22);
-    }
-    protected void requestFileAccessPermission(int RequestCode)
-    {
-        ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},RequestCode);
-    }
-    @Override
-    public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
-        if (requestCode==1147) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            } else {
-                AlertDialog.Builder ab=new AlertDialog.Builder(this);
-                ab.setMessage("دسترسی لازم برای ذخیره فایل اعطا نشده است.لطفا اجازه ذخیره و مشاهده فایل را فراهم نمایید");
-                ab.setPositiveButton("OK",null);
-                ab.show();
-            }
-            return;
-        }
-    }
 
 }

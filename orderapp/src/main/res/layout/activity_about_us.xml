@@ -1,0 +1,75 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="layout.AboutUsFragment"
+    android:padding="10dp"
+    android:paddingTop="60dp">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+<ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/logo"
+    android:layout_centerHorizontal="true"
+    android:src="@drawable/logotransparent"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lbl_title"
+                    android:layout_gravity="center"
+                    android:textAlignment="center"
+                    android:textDirection="rtl"
+                    android:layout_below="@+id/logo"
+                    android:visibility="gone"
+                    android:textSize="19sp"
+                    android:text="بازرگانی آریو تجارت آذربایجان" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lbl_address"
+                    android:layout_gravity="center"
+                    android:layout_below="@id/lbl_title"
+                    android:textAlignment="center"
+                    android:textSize="19sp"
+                    android:text="عرضه کننده کلیه قطعات خودرو در شمالغرب کشور" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lbl_tel"
+                    android:layout_gravity="center"
+                    android:layout_below="@id/lbl_address"
+                    android:textAlignment="center"
+                    android:textSize="19sp"
+                    android:visibility="gone"
+                    android:text="تلفن تماس: 09144560455 - 09016543040" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lbl_email"
+                    android:visibility="gone"
+                    android:layout_gravity="center"
+                    android:layout_below="@id/lbl_tel"
+                    android:textAlignment="center"
+                    android:textSize="19sp"
+                    android:text="ایمیل: mail@gmail.com" />
+            </RelativeLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+    <!-- TODO: Update blank fragment layout -->
+
+
+</RelativeLayout>

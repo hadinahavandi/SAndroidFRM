@@ -50,7 +50,24 @@ public class SweetDate {
         return Date2String(new CivilDate(),DateSeparatorString);
     }
 
-    public String Time2String(Long Time,String DateSeparatorString,String TimeSeparatorString)
+    public static Long getTimeInMiliseconds()
+	{
+		Calendar cal = Calendar.getInstance();
+		return cal.getTimeInMillis();
+	}
+	public static String Time2DateString(Long Time,String DateSeparatorString)
+	{
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(Time);
+		CivilDate cd=new CivilDate();
+		String year = DateFormat.format("yyyy", cal).toString();
+		String month = DateFormat.format("MM", cal).toString();
+		String day = DateFormat.format("dd", cal).toString();
+		cd.setDate(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day));
+		PersianDate PDate=DateConverter.civilToPersian(cd);
+		return String.valueOf(PDate.getYear())+DateSeparatorString+String.valueOf(PDate.getMonth())+DateSeparatorString+String.valueOf(PDate.getDayOfMonth());
+	}
+    public static String Time2String(Long Time,String DateSeparatorString,String TimeSeparatorString)
 	{
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(Time);

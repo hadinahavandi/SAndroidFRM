@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="ir.sweetsoft.orderapp">
+
+    <application
+        android:name=".App"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".ui.common.AboutDeveloperActivity"
+            android:label="درباره توسعه دهنده"></activity>
+        <activity android:name=".ui.common.AboutUsActivity"
+            android:label="درباره ما"></activity>
+        <activity android:name=".ui.print.PrintActivity"
+            android:label="چاپ" />
+        <activity
+            android:name=".ui.menu.MenuActivity"
+            android:label="@string/app_name" />
+        <activity android:name=".ui.product.ProductManageActivity" />
+        <activity
+            android:name=".ui.product.ProductListActivity"
+            android:label="@string/title_activity_product_list" />
+        <activity android:name=".ui.customer.CustomerManageActivity" />
+        <activity
+            android:name=".ui.customer.CustomerListActivity"
+            android:label="فهرست مشتریان" />
+        <activity android:name=".ui.factor.FactorManageActivity" />
+        <activity
+            android:name=".ui.factor.FactorListActivity"
+            android:label="فهرست سفارشات" />
+
+        <meta-data
+            android:name="AA_DB_NAME"
+            android:value="sweetyorderapp.db" />
+        <meta-data
+            android:name="AA_DB_VERSION"
+            android:value="3" />
+        <meta-data
+            android:name="AA_MODELS"
+            android:value="ir.sweetsoft.orderapp.Model.Factor,ir.sweetsoft.orderapp.Model.Product,ir.sweetsoft.orderapp.Model.FactorProduct,ir.sweetsoft.orderapp.Model.Customer,ir.sweetsoft.orderapp.Model.Parameter" />
+
+        <provider
+            android:name="com.activeandroid.content.ContentProvider"
+            android:authorities="ir.sweetsoft.orderapp"
+            android:enabled="true"
+            android:exported="false" />
+
+        <activity
+            android:name=".SplashActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:theme="@style/FullscreenTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

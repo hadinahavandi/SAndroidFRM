@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff" >
+
+    <EditText
+        android:layout_width="match_parent"
+        android:id="@+id/txt_password"
+        android:layout_height="wrap_content"
+        android:hint="رمز اولیه نرم افزار"
+        android:visibility="gone"
+        android:layout_alignParentTop="true"
+        />
+    <Button
+        android:id="@+id/btn_checkpass"
+        android:text="بررسی"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_below="@+id/txt_password"/>
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/splashlogo" />
+
+</RelativeLayout>

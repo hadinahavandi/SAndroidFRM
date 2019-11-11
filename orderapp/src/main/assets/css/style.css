@@ -1,0 +1,133 @@
+@font-face { font-family: 'b nazanin'; src: url('../fonts/bnazanin.ttf'); }
+.description
+{
+margin-top: 0.4cm;
+width: 7.1in;
+float: right;
+margin-right:1cm;
+}
+.signatureright
+{
+margin-top: 1cm;
+width: 7cm;
+float: right;
+margin-right:1cm;
+}
+.signatureleft
+{
+margin-top: 1cm;
+width: 7cm;
+float: left;
+margin-left:1cm;
+}
+.logocontainer{
+position: absolute;
+width: 90%;
+top: 1cm;
+text-align: center;
+z-index: 1;
+}
+.footbar
+{
+border-top:3px #000000 solid;
+position: absolute;
+bottom:0;
+height:1.5in;
+width:7.1in;
+margin-top:1cm;
+}
+.footbar p
+{
+font-size: 13pt;
+}
+table {
+width: 190mm;
+font-family:'b nazanin';
+font-size:14pt;
+border-collapse:collapse;
+}
+td{
+width:15mm;
+border:1px solid #666666;
+padding:2px;
+}
+.customername
+{
+font-family:'b nazanin';
+font-size:17pt;
+margin-top:-8mm;
+margin-bottom:5mm;
+}
+.logoname
+{
+font-family:'b nazanin';
+font-size:14pt;
+margin-top:-2mm;
+}
+.productname{
+width:80mm;
+border:1px solid #666666;
+padding:2px;
+}
+.productdescription{
+width:90mm;
+border:1px solid #666666;
+padding:2px;
+}
+p{
+text-align:right;
+width:100%;
+font-size:14pt;
+}
+.head td{
+background:#eee;
+font-weight:bold;
+border:1px solid #666666;
+padding:2px;
+}
+body{
+direction:rtl;
+font-family:'b nazanin';
+text-align:center;
+}
+.headbar
+{
+width:100%;
+height:1in;
+border-bottom:3px #000000 solid;
+margin-bottom:1cm;
+}
+.logo{
+width:5cm;
+}
+.headbarleft
+{
+width: 5cm;
+position: absolute;
+top: 1cm;
+left: 0;
+z-index: 1;
+}
+.headbarleft p{
+text-align:  right;
+font-size: 14pt;
+}
+.rightsweet
+{
+position:absolute;
+right:1cm;
+color:#ccc;
+writing-mode: vertical-rl;
+top:150mm;
+z-index:0;
+}
+@page{
+size: 7in 9.25in;
+border:1px solid #000;
+}
+@media print {
+html, body {
+	width: 210mm;
+	height: 297mm;
+}
+}

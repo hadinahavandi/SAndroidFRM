@@ -1,0 +1,82 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="layout.AboutUsFragment"
+    android:padding="10dp"
+    android:paddingTop="60dp">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/logo"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/sweetlogo"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lbl_title"
+                    android:layout_below="@+id/logo"
+                    android:layout_gravity="center"
+                    android:textAlignment="center"
+                    android:text="طراحی،توسعه و پشتیبانی:"
+                    android:textSize="19sp"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lbl_address"
+                    android:layout_gravity="center"
+                    android:layout_below="@id/lbl_title"
+                    android:textAlignment="center"
+                    android:textDirection="rtl"
+                    android:text="گروه نرم افزاری Sweet"
+                    android:textSize="19sp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lbl_tel"
+                    android:layout_gravity="center"
+                    android:layout_below="@id/lbl_address"
+                    android:textAlignment="center"
+                    android:text="www.sweetsoft.ir"
+                    android:textSize="19sp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lbl_mob"
+                    android:layout_gravity="center"
+                    android:layout_below="@id/lbl_tel"
+                    android:textAlignment="center"
+                    android:text="09127254987"
+                    android:textSize="19sp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lbl_email"
+                    android:layout_gravity="center"
+                    android:layout_below="@id/lbl_mob"
+                    android:textAlignment="center"
+                    android:text="sweetsoftir@gmail.com"
+                    android:textSize="19sp" />
+            </RelativeLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+    <!-- TODO: Update blank fragment layout -->
+
+
+</RelativeLayout>

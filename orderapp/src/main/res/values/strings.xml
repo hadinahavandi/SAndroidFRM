@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">ATAT</string>
+    <string name="title_activity_main">آریو تجارت آذربایجان</string>
+    <string name="navigation_drawer_open">باز کردن منو</string>
+    <string name="navigation_drawer_close">بستن منو</string>
+    <string name="nav_header_title">بازرگانی آریو تجارت آذربایجان</string>
+    <string name="nav_header_subtitle"></string>
+    <string name="nav_header_desc"></string>
+    <string name="action_settings">تنظیمات</string>
+
+    <string name="menu_products">محصولات</string>
+    <string name="menu_orders">سفارشات</string>
+    <string name="menu_aboutus">درباره ما</string>
+    <string name="menu_exit">خروج</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_product_list">فهرست محصولات</string>
+</resources>

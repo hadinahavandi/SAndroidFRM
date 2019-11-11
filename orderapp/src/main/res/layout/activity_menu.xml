@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:padding="30sp">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="30sp">
+
+                <Button
+                    android:id="@+id/btnproducts"
+                    style="@style/button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:text="محصولات"
+                    android:textSize="19sp"/>
+
+                <Button
+                    android:id="@+id/btncustomers"
+                    style="@style/button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/btnproducts"
+                    android:text="مشتریان"
+                    android:textSize="19sp"/>
+                <Button
+                    android:id="@+id/btnfactors"
+                    style="@style/button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/btncustomers"
+                    android:text="سفارشات"
+                    android:textSize="19sp"/>
+                <Button
+                    android:id="@+id/btnarchivedfactors"
+                    style="@style/button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/btnfactors"
+                    android:text="سفارشات آرشیو شده"
+                    android:textSize="19sp"/>
+
+                <Button
+                    android:id="@+id/btnaboutus"
+                    style="@style/button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/btnarchivedfactors"
+                    android:text="درباره ما"
+                    android:textSize="19sp"/>
+
+                <Button
+                    android:id="@+id/btnaboutdeveloper"
+                    style="@style/button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/btnaboutus"
+                    android:textSize="19sp"
+                    android:text="درباره توسعه دهنده" />
+
+                <Button
+                    android:id="@+id/btnexit"
+                    style="@style/button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/btnaboutdeveloper"
+                    android:textSize="19sp"
+                    android:text="خروج" />
+            </RelativeLayout>
+        </ScrollView>
+    </RelativeLayout>
+</RelativeLayout>

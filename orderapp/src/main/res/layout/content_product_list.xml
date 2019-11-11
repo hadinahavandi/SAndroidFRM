@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".ui.product.ProductListActivity"
+    tools:showIn="@layout/activity_product_list"
+    android:padding="16dp">
+<EditText
+    android:id="@+id/txtsearch"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    style="@style/edittext"
+    android:maxLines="1"
+    android:inputType="text"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list"
+        android:name="ir.sweetsoft.orderapp.ui.productFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_below="@+id/txtsearch"
+        app:layoutManager="LinearLayoutManager"
+        tools:context=".ui.product.productFragment"
+        tools:listitem="@layout/fragment_product"
+        android:layout_alignParentBottom="true"/>
+</RelativeLayout>
