@@ -42,10 +42,10 @@ public class ProductRecyclerViewAdapter extends RecyclerView.Adapter<ProductRecy
     }
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText((position+1)+"");
-        holder.mContentView.setText(mValues.get(position).Name);
-        holder.mPrice.setText(String.format(Locale.ENGLISH,"%,d",Integer.valueOf(mValues.get(position).Price))+" ریال");
+        holder.mItem = mValues.get(holder.getAdapterPosition());
+        holder.mIdView.setText((holder.getAdapterPosition()+1)+"");
+        holder.mContentView.setText(mValues.get(holder.getAdapterPosition()).Name);
+        holder.mPrice.setText(String.format(Locale.ENGLISH,"%,d",Integer.valueOf(mValues.get(holder.getAdapterPosition()).Price))+" ریال");
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,12 +53,12 @@ public class ProductRecyclerViewAdapter extends RecyclerView.Adapter<ProductRecy
                 if(viewType==ProductListActivity.VIEWTYPE_EDIT)
                 {
                     i=new Intent(activity,ProductManageActivity.class);
-                    i.putExtra("item_id",mValues.get(position).getId());
+                    i.putExtra("item_id",mValues.get(holder.getAdapterPosition()).getId());
                     activity.startActivity(i);
                 }
                 else {
                     i=new Intent();
-                    i.putExtra("item_id",mValues.get(position).getId());
+                    i.putExtra("item_id",mValues.get(holder.getAdapterPosition()).getId());
                     activity.setResult(Activity.RESULT_OK,i);
                     activity.finish();
                 }

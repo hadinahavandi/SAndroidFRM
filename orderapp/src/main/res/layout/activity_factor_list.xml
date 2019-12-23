@@ -23,13 +23,12 @@
     <include layout="@layout/content_factor_list" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/deletefab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:visibility="gone"
-        app:srcCompat="@drawable/btn_add" />
+        app:srcCompat="@drawable/btn_delete" />
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/archivefab"
         android:layout_width="wrap_content"

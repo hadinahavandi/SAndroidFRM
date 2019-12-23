@@ -3,6 +3,10 @@ package ir.sweetsoft.orderapp.ui.product;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.print.PageRange;
+import android.print.onPdfMakeComplatedListener;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -16,16 +20,19 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.activeandroid.query.Select;
+import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 import java.util.List;
 import java.util.Locale;
 
 import common.SweetDate;
 import common.SweetFonts;
+import ir.sweetsoft.orderapp.HtmlAdapter;
 import ir.sweetsoft.orderapp.Model.FactorProduct;
 import ir.sweetsoft.orderapp.Model.Product;
 import ir.sweetsoft.orderapp.R;
 import ir.sweetsoft.orderapp.ui.factor.FactorManageActivity;
+import ir.sweetsoft.orderapp.ui.menu.MenuActivity;
 import ir.sweetsoft.orderapp.ui.print.PrintActivity;
 
 public class ProductListActivity extends AppCompatActivity {
@@ -83,17 +90,42 @@ public class ProductListActivity extends AppCompatActivity {
         printfab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ProductListActivity.this.openPrintPage();
+                new LovelyStandardDialog(ProductListActivity.this, LovelyStandardDialog.ButtonLayout.VERTICAL)
+                        .setTitle("چاپ فهرست محصولات")
+                        .setMessage("آیا می خواهید قیمت محصولات هم چاپ شود؟")
+                        .setPositiveButton("بله", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                ProductListActivity.this.openPrintPage(true);                            }
+                        })
+
+                        .setNegativeButton("خیر", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                ProductListActivity.this.openPrintPage(false);
+                            }
+                        })
+                        .show();
             }
         });
+
     }
 
-    private void openPrintPage()
+    private void openPrintPage(Boolean showPrice)
     {
-        Intent i = new Intent(ProductListActivity.this, PrintActivity.class);
         Products=getProducts(txtSearch.getText().toString());
-        i.putExtra("html_data", getDataHTML());
-        startActivity(i);
+        final String HTML=getDataHTML(showPrice);
+        HtmlAdapter adapter=new HtmlAdapter(this,HTML);
+        adapter.makePDF(Environment.getExternalStorageDirectory().getAbsolutePath()+"/ata/"
+                ,showPrice?"Product-Price-List.pdf":"Product-List.pdf",
+                new onPdfMakeComplatedListener() {
+                    @Override
+                    public void onComplate(PageRange[] pr) {
+                        Intent i = new Intent(ProductListActivity.this, PrintActivity.class);
+                        i.putExtra("html_data", HTML);
+                        startActivity(i);
+                    }
+                });
     }
     @Override
     public void onResume()
@@ -103,7 +135,7 @@ public class ProductListActivity extends AppCompatActivity {
     }
     private List<Product> getProducts(String SearchText)
     {
-        List<Product> Products=new Select().from(Product.class).orderBy("name").where("name like ?","%"+SearchText+"%").execute();
+        List<Product> Products=new Select().from(Product.class).orderBy("name").where("name like ? or code like ? or description like ?","%"+SearchText+"%","%"+SearchText+"%","%"+SearchText+"%").execute();
         return Products;
     }
     public void loadData(String SearchText)
@@ -113,70 +145,73 @@ public class ProductListActivity extends AppCompatActivity {
         theAdapter.mValues=Products;
         theAdapter.notifyDataSetChanged();
     }
-    private String getDataHTML() {
+    private String getDataHTML(Boolean showPrice) {
         String HTML = "<!DOCTYPE html>\n" +
                 "<html><head><title>فهرست محصولات</title>\n"+
                 "  <link rel=\"stylesheet\" href=\"css/style.css\">\n"+
                 "  <link rel=\"stylesheet\" href=\"css/normalize.min.css\">\n" +
                 "  <link rel=\"stylesheet\" href=\"css/paper.css\">\n" +
-                "</head><body class=\"A4\">\n" +
-                "<section class=\"sheet padding-10mm\">\n" +
+                "</head><body>";
+                int pageSize=20;
+        int pageNumber=0;
+                for(int startRow=0;Products != null && startRow<Products.size();startRow+=pageSize)
+                {
+                    HTML+=ItemsToPage(pageNumber,pageSize,showPrice);
+                    pageNumber++;
+
+                }
+        HTML+="</body></html>";
+        return HTML;
+    }
+    private String ItemsToPage(int pageNumber,int pageSize,Boolean showPrice)
+    {
+        int startRow=pageNumber*pageSize;
+        int endRow=startRow+pageSize;
+
+        String HTML="";
+        HTML+="<div class=\"A5\">\n" +
+                "<section class=\"sheet padding-2mm\">\n" +
                 "    <article>";
         String Header="<div class='headbar'>\n" +
                 "\t\t<div class='headbarleft'>\n" +
                 "\t\t<p>تاریخ:"+ SweetDate.Time2DateString(SweetDate.getTimeInMiliseconds(),"/")+"</p>\n" +
-//                "\t\t<p>شماره:</p>\n" +
                 "\t\t</div>\n" +
                 "\t\t<div class='logocontainer'><img src='img/logoblack.png' class='logo' />" +
                 "\n" +
                 "\t<div class='logoname'>فهرست کالاها</div>" +
                 "</div>\n" +
                 "\t</div>\n" +
-//                "\t<div class='customername'>آقای نهاوندی</div>\n" +
                 "\t<div class='rightsweet'>گروه نرم افزاری سوئیت - sweetsoft.ir</div>\n";
         HTML+=Header;
         String Title = "<table><tr class='head'>";
         Title += "<td>ردیف</td>";
+        Title += "<td>کد</td>";
         Title += "<td>نام کالا</td>";
-        Title += "<td>قیمت به ریال</td>";
-//        Title += "<td>توضیحات</td>";
+        if(showPrice)
+            Title += "<td>قیمت به ریال</td>";
         Title += "</tr>";
         HTML += Title;
         try {
             if (Products != null) {
-                int RowNum = 0;
-                for (Product p : Products) {
+                for (int RowNum=startRow;RowNum<Products.size() && RowNum<endRow;RowNum++) {
+                    Product p=Products.get(RowNum);
                     String Row = "<tr class='content'>";
-                    Row += "<td>" + (++RowNum) + "</td>";
+                    Row += "<td>" + (RowNum+1) + "</td>";
+                    Row += "<td>" + p.Code + "</td>";
                     Row += "<td class='productname'>" + p.Name + "</td>";
-                    Row += "<td>" + String.format(Locale.ENGLISH,"%,d",Integer.valueOf(p.Price)) + "</td>";
+                    if(showPrice)
+                        Row += "<td>" + String.format(Locale.ENGLISH,"%,d",Integer.valueOf(p.Price)) + "</td>";
                     Row += "</tr>";
                     HTML += Row;
                 }
-//                String EndRow = "<tr class='content'>";
-//                EndRow += "<td class='productname'>********************</td><td>****</td><td class='productdescription'>********************</td>";
-//                EndRow += "</tr>";
-//                HTML += EndRow;
             }
         } catch (Exception ex) {
         }
         HTML += "</table>";
-/*
-        String Name ="";
-        if(factor.Description!=null && factor.Description.length()>0)
-//            Name+= "<div class='description'><p>توضیحات: "+factor.Description+"</p></div>\n";
-            Name+= "<div class='signatureright'><p>ویزیتور: "+factor.Name+"</p></div>\n" +
-//                "<div class='signatureleft'><p>فروشنده: بازرگانی آریو تجارت آذربایجان"+"</p></div>\n" +
-                    "<div class='footbar'>\n" +
-                    "\t\t<div class='footbarright'>\n" +
-                    "\t\t<p>تلفن: \n" +
-                    "  09144560455 - 09016543040</p>\n" +
-                    "\t\t</div>\n" +
-                    "\t</div>";
-        HTML += Name;
-        */
 
-        HTML+="</article></section></body></html>";
+        HTML+="</article></section>";
+        HTML += "<div class='pagenumber'>"+(pageNumber+1)+"</div>";
+        HTML+="</div>";
         return HTML;
     }
 }

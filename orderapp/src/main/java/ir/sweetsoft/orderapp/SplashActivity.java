@@ -32,21 +32,22 @@ public class SplashActivity extends BaseAppCompatActivity {
     private EditText txtPassword;
     private Button btnCheckPass;
     private String MasterPassword="156arioazarbaijan1148";
+    private String MASTER_PASSWORD_PARAMETER_TITLE="master_pass";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        if(shouldAskPermission())
+            requestFileAccessPermission(1147);
         imgLogo=findViewById(R.id.imgLogo);
         txtPassword=findViewById(R.id.txt_password);
         btnCheckPass=findViewById(R.id.btn_checkpass);
         SweetDisplayScaler scaler=new SweetDisplayScaler(this);
         imgLogo.getLayoutParams().width=scaler.WidthPercentToPixel(70);
-        List<Parameter> passParams=new Select().from(Parameter.class).where("name=?","master_pass").execute();
-        if(passParams==null || passParams.size()==0 || !passParams.get(0).value.equals(MasterPassword))
+        String master_pass= Parameter.getValueByName(MASTER_PASSWORD_PARAMETER_TITLE,"");
+        if(!master_pass.equals(MasterPassword))
         {
-
             txtPassword.setVisibility(View.VISIBLE);
-//            txtPassword.setText(passParams.get(0).value);
             btnCheckPass.setVisibility(View.VISIBLE);
             btnCheckPass.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -54,10 +55,7 @@ public class SplashActivity extends BaseAppCompatActivity {
                     String enteredPass=txtPassword.getText().toString().trim().toLowerCase();
                     if(enteredPass.equals(MasterPassword))
                     {
-                        Parameter p=new Parameter();
-                        p.name="master_pass";
-                        p.value=enteredPass;
-                        p.save();
+                        Parameter.setParamValue(MASTER_PASSWORD_PARAMETER_TITLE,enteredPass);
                         checkAndGoIn(1);
                     }
                     else
@@ -82,12 +80,12 @@ public class SplashActivity extends BaseAppCompatActivity {
     }
     private void checkAndGoIn(int TimeOut)
     {
-        List<Product> products= new Select().from(Product.class).execute();
-        if(products!=null && products.size()>30)
-            showMaxUsageInvalidationMessageAndExit();
-        else {
+//        List<Product> products= new Select().from(Product.class).execute();
+//        if(products!=null && products.size()>30)
+//            showMaxUsageInvalidationMessageAndExit();
+//        else {
             goToMenuPage(TimeOut);
-        }
+//        }
     }
     private void goToMenuPage(int TimeOut)
     {
@@ -96,7 +94,7 @@ public class SplashActivity extends BaseAppCompatActivity {
 
             @Override
             public void run() {
-                Intent i = new Intent(SplashActivity.this, MenuActivity.class);
+                Intent i = new Intent(SplashActivity.this, PasswordActivity.class);
                 startActivity(i);
                 finish();
             }

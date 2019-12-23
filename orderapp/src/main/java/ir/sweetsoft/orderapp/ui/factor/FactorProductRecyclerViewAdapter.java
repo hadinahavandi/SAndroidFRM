@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,66 +35,26 @@ public class FactorProductRecyclerViewAdapter extends RecyclerView.Adapter<Facto
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_factorproduct, parent, false);
-        return new ViewHolder(view);
-    }
+        ViewHolder vh = new ViewHolder(view, new MyCustomCountEditTextListener(),new MyCustomDescriptionEditTextListener(),new MyCustomLongClickListener());
 
+        return vh;
+    }
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText((position+1)+"");
-        holder.mNameView.setText(mValues.get(position).product.Name);
-        holder.mCountView.setText(mValues.get(position).Count+"");
-        if(mValues.get(position).Description!=null)
-            holder.mDescriptionView.setText(mValues.get(position).Description+"");
-        View.OnLongClickListener longClickListener=new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                String Message="آیا می خواهید این مورد را حذف کنید؟";
-                new AlertDialog.Builder(activity)
-                        .setTitle("حذف مورد")
-                        .setMessage(Message)
-                        .setPositiveButton("بله", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                holder.mItem.delete();
-                                activity.loadData();
-                            }
-                        })
-                        .setNegativeButton("خیر", null)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
-                return true;
-            }
-        };
-        holder.mView.setOnLongClickListener(longClickListener);
-        TextWatcher changeWatcher=new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+        int adapterPosition=holder.getAdapterPosition();
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+        holder.CountChangeListener.position=adapterPosition;
+        holder.DescriptionChangeListener.position=adapterPosition;
+        holder.LongClickListener.position=adapterPosition;
 
-            }
+        FactorProduct itemObject=mValues.get(adapterPosition);
+        holder.mItem = itemObject;
+        holder.mIdView.setText(String.valueOf(adapterPosition+1));
+        holder.mNameView.setText(itemObject.product.Name);
+        holder.mCountView.setText(String.valueOf(itemObject.Count));
+        if(holder.mItem.Description!=null)
+            holder.mDescriptionView.setText(holder.mItem.Description+"");
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                String count=holder.mCountView.getText().toString().trim();
-                String description=holder.mDescriptionView.getText().toString().trim();
-
-                holder.mItem.Description=description;
-                if(count.length()>0)
-                {
-                    try
-                    {
-                        holder.mItem.Count=Integer.valueOf(count);
-                    }
-                    catch (Exception ex){}
-                }
-                holder.mItem.save();
-            }
-        };
-        holder.mCountView.addTextChangedListener(changeWatcher);
-        holder.mDescriptionView.addTextChangedListener(changeWatcher);
     }
     @Override
     public int getItemCount() {
@@ -106,9 +67,11 @@ public class FactorProductRecyclerViewAdapter extends RecyclerView.Adapter<Facto
         public final TextView mNameView;
         public final EditText mCountView;
         public final EditText mDescriptionView;
+        public MyCustomCountEditTextListener CountChangeListener;
+        public MyCustomDescriptionEditTextListener DescriptionChangeListener;
         public FactorProduct mItem;
-
-        public ViewHolder(View view) {
+        public MyCustomLongClickListener LongClickListener;
+        public ViewHolder(View view,MyCustomCountEditTextListener CountChangeListener,MyCustomDescriptionEditTextListener DescriptionChangeListener,MyCustomLongClickListener LongClickListener) {
             super(view);
             mView = view;
             Typeface font= SweetFonts.getFont(activity,SweetFonts.IranSans);
@@ -120,6 +83,13 @@ public class FactorProductRecyclerViewAdapter extends RecyclerView.Adapter<Facto
             mCountView.setTypeface(font);
             mDescriptionView = (EditText) view.findViewById(R.id.item_description);
             mDescriptionView.setTypeface(font);
+            this.LongClickListener=LongClickListener;
+            this.CountChangeListener = CountChangeListener;
+            this.DescriptionChangeListener = DescriptionChangeListener;
+            this.mDescriptionView.addTextChangedListener(DescriptionChangeListener);
+            this.mCountView.addTextChangedListener(CountChangeListener);
+            mView.setOnLongClickListener(LongClickListener);
+
         }
 
         @Override
@@ -127,4 +97,92 @@ public class FactorProductRecyclerViewAdapter extends RecyclerView.Adapter<Facto
             return super.toString() + " '" + mNameView.getText() + "'"+ " '" + mCountView.getText() + "'";
         }
     }
+
+    class MyCustomDescriptionEditTextListener implements TextWatcher {
+        private int position;
+        public void updatePosition(int position) {
+            this.position = position;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            // no op
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            FactorProduct fp=mValues.get(position);
+            fp.Description = charSequence.toString();
+//            Log.d("SAVEE","SS");
+
+            Log.d("SAVEE","Pos:"+position);
+            Log.d("SAVEE","Description:"+charSequence.toString());
+            fp.save();
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            // no op
+        }
+    }
+    class MyCustomLongClickListener implements View.OnLongClickListener
+    {
+
+        int position;
+        @Override
+        public boolean onLongClick(View v) {
+            String Message="آیا می خواهید این مورد را حذف کنید؟";
+            new AlertDialog.Builder(activity)
+                    .setTitle("حذف مورد")
+                    .setMessage(Message)
+                    .setPositiveButton("بله", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            mValues.get(position).delete();
+                            activity.loadData();
+                        }
+                    })
+                    .setNegativeButton("خیر", null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+            return true;        }
+    }
+    class MyCustomCountEditTextListener implements TextWatcher {
+        private int position;
+        public void updatePosition(int position) {
+            this.position = position;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            // no op
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            FactorProduct fp=mValues.get(position);
+
+                if(charSequence.toString().trim().length()>0)
+                {
+                    try
+                    {
+                        Log.d("SAVEE","Pos:"+position);
+                        Log.d("SAVEE","OldCount:"+fp.Count);
+                        Log.d("SAVEE","Count:"+Integer.valueOf(charSequence.toString().trim()));
+
+                        fp.Count=Integer.valueOf(charSequence.toString().trim());
+                        fp.save();
+//                        Log.d("SAVEE","123");
+
+                    }
+                    catch (Exception ex){}
+                }
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            // no op
+        }
+    }
+
 }

@@ -22,7 +22,7 @@
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:maxLines="1"
-        android:inputType="text"
+        android:inputType="number"
         style="@style/edittext"/>
     <TextView
         android:id="@+id/item_name"

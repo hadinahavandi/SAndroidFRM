@@ -1,5 +1,6 @@
-package ir.sweetsoft.orderapp.ui.print;
+package ir.sweetsoft.orderapp;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -25,74 +26,50 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 
-import common.SweetFonts;
-import ir.sweetsoft.orderapp.R;
+import ir.sweetsoft.orderapp.ui.print.PrintActivity;
 
-public class PrintActivity extends AppCompatActivity {
+import static android.content.Context.PRINT_SERVICE;
 
-    Button btnPrint;
+public class HtmlAdapter {
     WebView webView;
-    String PDFName;
-    String PDFPath;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_print);
-        String WebViewContent=getIntent().getStringExtra("html_data");
-        PDFName=getIntent().getStringExtra("pdf_name");
-        PDFPath=getIntent().getStringExtra("pdf_path");
-        if(PDFName==null || PDFName.length()==0)
-            PDFName="no_name.pdf";
-        if(PDFPath==null || PDFPath.length()==0)
-            PDFPath=Environment.getExternalStorageDirectory().getAbsolutePath();
-        Typeface font= SweetFonts.getFont(this,SweetFonts.IranSans);
-
-        btnPrint=(Button)findViewById(R.id.btnprint);
-        btnPrint.setTypeface(font);
-        webView=(WebView)findViewById(R.id.webview);
-        String mime = "text/html";
-        String encoding = "utf-8";
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.setWebViewClient(new WebViewClient() {
-
-            public void onPageFinished(WebView view, String url) {
-                // do your stuff here
-
-            }
-        });
-
-        webView.loadDataWithBaseURL("file:///android_asset/", WebViewContent, mime, encoding, null);
-        btnPrint.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                webViewToJPG();
-//                webViewToPDF();
-                createWebPrintJob(webView);
-            }
-        });
-    }
-    private void webViewToPDF()
+    Activity activity;
+    String HTMLContent;
+    public HtmlAdapter(Activity theActivity,String HTMLContent)
     {
-        File path = new File(PDFPath);
+        activity=theActivity;
+        webView=new WebView(activity);
+        webView.getSettings().setJavaScriptEnabled(true);
+        this.HTMLContent=HTMLContent;
+    }
+    private void _makePDF(String ExportPath, String ExportFileName,onPdfMakeComplatedListener onComplateListener)
+    {
+        File path = new File(ExportPath);
         PrintDocumentAdapter printAdapter;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            printAdapter = webView.createPrintDocumentAdapter("test");
+            printAdapter = webView.createPrintDocumentAdapter(ExportFileName);
         } else {
             printAdapter = webView.createPrintDocumentAdapter();
         }
         PrintAttributes attributes = new PrintAttributes.Builder()
                 .setMediaSize(PrintAttributes.MediaSize.ISO_A5)
                 .setResolution(new PrintAttributes.Resolution("id", PRINT_SERVICE, 300, 300))
-                .setColorMode(PrintAttributes.COLOR_MODE_COLOR)
+                .setColorMode(PrintAttributes.COLOR_MODE_MONOCHROME)
                 .setMinMargins(new PrintAttributes.Margins(0, 0, 0, 0))
                 .build();
         PdfPrint p=new PdfPrint(attributes);
-        p.print(printAdapter, path, PDFName, new onPdfMakeComplatedListener() {
-            @Override
-            public void onComplate(PageRange[] pr) {
-
+        p.print(printAdapter, path, ExportFileName,onComplateListener );
+    }
+    public void makePDF(String ExportPath, String ExportFileName,onPdfMakeComplatedListener onComplateListener)
+    {
+        webView.setWebViewClient(new WebViewClient() {
+            public void onPageFinished(WebView view, String url) {
+                _makePDF(ExportPath,ExportFileName,onComplateListener);
             }
         });
+        String mime = "text/html";
+        String encoding = "utf-8";
+        webView.loadDataWithBaseURL("file:///android_asset/", HTMLContent, mime, encoding, null);
+
     }
     private void webViewToJPG()
     {
@@ -136,19 +113,19 @@ public class PrintActivity extends AppCompatActivity {
     private void createWebPrintJob(WebView webView) {
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            PrintManager printManager = (PrintManager) this
-                    .getSystemService(Context.PRINT_SERVICE);
+            PrintManager printManager = (PrintManager) activity
+                    .getSystemService(PRINT_SERVICE);
 
             PrintDocumentAdapter printAdapter =
                     null;
             printAdapter = webView.createPrintDocumentAdapter("MyDocument");
-            String jobName = getString(R.string.app_name) + " Print Test";
+            String jobName = activity.getString(R.string.app_name) + " Print Test";
 
             printManager.print(jobName, printAdapter,
                     new PrintAttributes.Builder().build());
         }
         else{
-            Toast.makeText(PrintActivity.this, "Print job has been canceled! ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, "Print job has been canceled! ", Toast.LENGTH_SHORT).show();
         }
 
     }

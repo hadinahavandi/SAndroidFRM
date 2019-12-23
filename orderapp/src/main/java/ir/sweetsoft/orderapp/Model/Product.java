@@ -8,6 +8,8 @@ import com.activeandroid.annotation.Table;
 public class Product extends Model {
     @Column(name = "name")
     public String Name;
+    @Column(name = "code")
+    public String Code;
     @Column(name = "description")
     public String Description;
     @Column(name = "price")

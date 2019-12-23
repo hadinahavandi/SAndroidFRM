@@ -19,10 +19,12 @@ import ir.sweetsoft.orderapp.R;
 public class ProductManageActivity extends AppCompatActivity {
 
     Product p;
+    EditText textCode;
     EditText textName;
     EditText textPrice;
     EditText textDescription;
     Button btnSave;
+    TextView lblCode;
     TextView lblName;
     TextView lblPrice;
     TextView lblDescription;
@@ -37,8 +39,11 @@ public class ProductManageActivity extends AppCompatActivity {
             p=Product.load(Product.class,id);
         else
             p=new Product();
+        textCode=findViewById(R.id.txtcode);
         textName=findViewById(R.id.txtname);
 
+        lblCode=findViewById(R.id.lblcode);
+        lblCode.setTypeface(font);
         lblName=findViewById(R.id.lblname);
         lblName.setTypeface(font);
         lblDescription=findViewById(R.id.lbldescription);
@@ -47,24 +52,28 @@ public class ProductManageActivity extends AppCompatActivity {
         textDescription.setTypeface(font);
         if(p.Name!=null)
             textName.setText(p.Name);
+        if(p.Code!=null)
+            textCode.setText(p.Code);
         if(p.Description!=null)
             textDescription.setText(p.Description);
+        textCode.setTypeface(font);
         textName.setTypeface(font);
         textPrice=findViewById(R.id.txtprice);
         lblPrice=findViewById(R.id.lblprice);
         lblPrice.setTypeface(font);
         if(p.Price!=null)
-            textPrice.setText(String.format(Locale.ENGLISH, "%,d", Integer.valueOf(p.Price)));
+            textPrice.setText(String.valueOf(Integer.valueOf(p.Price)));
         textPrice.setTypeface(font);
         btnSave=findViewById(R.id.btnsave);
         btnSave.setTypeface(font);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                save(textName.getText().toString(),textDescription.getText().toString(),textPrice.getText().toString());
+                save(textCode.getText().toString(),textName.getText().toString(),textDescription.getText().toString(),textPrice.getText().toString());
                 ProductManageActivity.this.finish();
             }
         });
+        textCode.addTextChangedListener(changeWatcher);
         textName.addTextChangedListener(changeWatcher);
         textDescription.addTextChangedListener(changeWatcher);
         textPrice.addTextChangedListener(changeWatcher);
@@ -110,13 +119,14 @@ public class ProductManageActivity extends AppCompatActivity {
 
         @Override
         public void afterTextChanged(Editable s) {
-            save(textName.getText().toString(),textDescription.getText().toString(),textPrice.getText().toString());
+            save(textCode.getText().toString(),textName.getText().toString(),textDescription.getText().toString(),textPrice.getText().toString());
         }
     };
-    private void save(String Name,String Description,String Price)
+    private void save(String Code,String Name,String Description,String Price)
     {
 
         p.Name = (Name==null||Name=="")?"بدون نام":Name;
+        p.Code = (Code==null||Code=="")?"0":Code;
         p.Description = Description==null?"":Description;
         try {
             p.Price = Integer.parseInt(Price.replaceAll("[\\D]", ""));
