@@ -67,10 +67,40 @@ font-family:'b nazanin';
 font-size:13pt;
 margin-top:-1.4mm;
 }
+.logodesc
+{
+font-family:'b nazanin';
+font-size:12pt;
+margin-top:2mm;
+color:'#555555';
+}
+
+
+
+.status-char{
+font-size:13pt;
+weight:bold;
+padding-right:2mm;
+padding-left:2mm;
+}
+
+
 .productname{
 width:68mm;
 border:1px solid #666666;
 padding:0.5mm;
+}
+.status-one-productname{
+color: #2196F3;
+}
+.status-two-productname{
+color: #4CAF50;
+}
+.status-three-productname{
+color: #FF9800;
+}
+.inactiveproductname{
+color:#E26969;
 }
 .productcode
 {
@@ -100,7 +130,7 @@ text-align:center;
 .headbar
 {
 width:100%;
-height:23mm;
+height:27mm;
 border-bottom:3px #000000 solid;
 margin-bottom:7mm;
 }

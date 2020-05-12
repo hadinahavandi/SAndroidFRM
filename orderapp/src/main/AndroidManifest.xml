@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ir.sweetsoft.orderapp">
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -24,6 +24,7 @@
         <activity android:name=".ui.product.ProductManageActivity" />
         <activity
             android:name=".ui.product.ProductListActivity"
+
             android:label="@string/title_activity_product_list" />
         <activity android:name=".ui.customer.CustomerManageActivity" />
         <activity
@@ -45,7 +46,7 @@
             android:value="sweetyorderapp.db" />
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="3" />
+            android:value="5" />
         <meta-data
             android:name="AA_MODELS"
             android:value="ir.sweetsoft.orderapp.Model.Factor,ir.sweetsoft.orderapp.Model.Product,ir.sweetsoft.orderapp.Model.FactorProduct,ir.sweetsoft.orderapp.Model.Customer,ir.sweetsoft.orderapp.Model.Parameter" />

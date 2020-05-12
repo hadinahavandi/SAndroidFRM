@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
@@ -26,6 +27,8 @@ import java.util.List;
 
 import common.BaseAppCompatActivity;
 import common.DBTools;
+import common.ExcelReader;
+import common.ExcelWriter;
 import common.SweetDisplayScaler;
 import common.SweetFile;
 import common.SweetFonts;
@@ -42,20 +45,14 @@ import ir.sweetsoft.orderapp.ui.common.AboutUsActivity;
 import ir.sweetsoft.orderapp.ui.customer.CustomerListActivity;
 import ir.sweetsoft.orderapp.ui.factor.FactorListActivity;
 import ir.sweetsoft.orderapp.ui.product.ProductListActivity;
+import jxl.read.biff.BiffException;
+import jxl.write.WriteException;
 
 public class MenuActivity extends BaseAppCompatActivity {
 
     String BackupFilePath=Environment.getExternalStorageDirectory().getAbsolutePath()+"/ATA/";
-    String BackupFileName="arioazarbaijan.swt";/*
-    Button btnProducts;
-    Button btnCustomers;
-    Button btnFactors;
-    Button btnArchivedFactors;
-    Button btnAboutUs;
-    Button btnAboutDeveloper;
-    Button btnBackup;
-    Button btnRestore;
-    Button btnExit;*/
+    String BackupFileName="arioazarbaijan.swt";
+    String ProductBackupFileName="products.stx";
 
     ImageView btnProducts;
     ImageView btnCustomers;
@@ -174,6 +171,15 @@ public class MenuActivity extends BaseAppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (doAllTablesHasRecord()) {
+                    List<Product> products=new Select().from(Product.class).execute();
+                    try {
+                        ExcelWriter ew=new ExcelWriter(BackupFilePath+"/"+ProductBackupFileName);
+                        String[] fields={"Name","Code","Description","Price","IsActive","Status"};
+                        ew.appendListSheet("products",products,fields,"--null--");
+                        ew.write();
+                    } catch (IllegalAccessException | IOException | NoSuchFieldException | WriteException e) {
+                        e.printStackTrace();
+                    }
                     DBTools.Export(BackupFilePath, BackupFileName, getApplicationContext(), "sweetyorderapp.db");
                     showBackupMadeMessage();
                 }
@@ -188,11 +194,13 @@ public class MenuActivity extends BaseAppCompatActivity {
             public void onClick(View v) {
                 new LovelyStandardDialog(MenuActivity.this, LovelyStandardDialog.ButtonLayout.VERTICAL)
                         .setTitle("پیام")
+                        .setIcon(R.drawable.info)
+                        .setTopColorRes(R.color.blue)
                         .setMessage("لطفا روش خواندن بکاپ را انتخاب کنید.")
                         .setPositiveButton("بازگردانی خودکار", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                MenuActivity.this.importBackup(BackupFilePath+"/"+BackupFileName);
+                                MenuActivity.this.showBackupMenu(BackupFilePath+"/"+BackupFileName,BackupFilePath+"/"+ProductBackupFileName);
                             }
                         })
 
@@ -211,12 +219,86 @@ public class MenuActivity extends BaseAppCompatActivity {
             }
         });
     }
+
+    private void importProductsFromExcel(String excelFilePath){
+        ExcelReader er= null;
+        int PRODUCT_COLUMNS=6;
+        try {
+            er = new ExcelReader(excelFilePath);
+            List<List<String>> sht=er.getSheet(0,"--null--");
+            int rowCount=sht.size();
+            if(rowCount>0 && sht.get(0).size()>0){
+
+                new Delete().from(FactorProduct.class).execute();
+                new Delete().from(Product.class).execute();
+                new Delete().from(Factor.class).execute();
+                for(int row=0;row<rowCount;row++){
+                    List<String> theRow=sht.get(row);
+                    int colCount=theRow.size();
+                    if(colCount==PRODUCT_COLUMNS){
+                        Product p=new Product();
+                        p.Name=theRow.get(0);
+                        p.Code=theRow.get(1);
+                        p.Description=theRow.get(2);
+                        String priceStr=theRow.get(3);
+                        if(priceStr==null)
+                            p.Price=0;
+                        else
+                            p.Price=Integer.parseInt(priceStr.trim());
+                        String IsActive=theRow.get(4);
+                        if(IsActive==null)
+                            p.IsActive=true;
+                        else
+                            p.IsActive=Boolean.parseBoolean(IsActive);
+                        String statusStr=theRow.get(5);
+                        if(statusStr==null)
+                            p.Status=0;
+                        else
+                            p.Status=Integer.parseInt(statusStr.trim());
+                        p.save();
+                    }
+                }
+                new LovelyStandardDialog(this, LovelyStandardDialog.ButtonLayout.VERTICAL)
+                        .setTitle("پیام")
+                        .setIcon(R.drawable.succeed)
+                        .setTopColorRes(R.color.green)
+                        .setMessage("فایل بکاپ محصولات بازگردانی شد.")
+                        .setPositiveButton("بستن",null)
+                        .show();
+            }
+        } catch (IOException | BiffException e) {
+            e.printStackTrace();
+        }
+    }
+    public void showBackupMenu(String BackupFilePath,String ExcelFilePath){
+        new LovelyStandardDialog(this, LovelyStandardDialog.ButtonLayout.VERTICAL)
+                .setTitle("پیام")
+                .setIcon(R.drawable.info)
+                .setTopColorRes(R.color.blue)
+                .setMessage("نوع فایل")
+                .setPositiveButton("اطلاعات کامل", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        importBackup(BackupFilePath);
+                    }
+                })
+                .setNegativeButton("محصولات", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        importProductsFromExcel(ExcelFilePath);
+                    }
+                })
+                .show();
+    }
     public void importBackup(String BackupFilePath)
     {
         try {
             DBTools.Import(BackupFilePath, getApplicationContext(), "sweetyorderapp.db");
             new LovelyStandardDialog(this, LovelyStandardDialog.ButtonLayout.VERTICAL)
                     .setTitle("پیام")
+                    .setIcon(R.drawable.succeed)
+                    .setTopColorRes(R.color.green)
                     .setMessage("فایل بکاپ بازگردانی شد،  برنامه بسته شده و دوباره اجرا خواهد شد.")
                     .setPositiveButton("بستن", new View.OnClickListener() {
                         @Override
@@ -235,6 +317,8 @@ public class MenuActivity extends BaseAppCompatActivity {
         {
             new LovelyStandardDialog(this, LovelyStandardDialog.ButtonLayout.VERTICAL)
                     .setTitle("پیام")
+                    .setIcon(R.drawable.warning)
+                    .setTopColorRes(R.color.Red)
                     .setMessage("فایل بکاپ پیدا نشد، لطفا نرم افزار یا روش دیگری را برای انتخاب فایل انتخاب کنید.")
                     .setPositiveButton("بستن", null)
                     .show();
@@ -243,6 +327,8 @@ public class MenuActivity extends BaseAppCompatActivity {
         {
             new LovelyStandardDialog(this, LovelyStandardDialog.ButtonLayout.VERTICAL)
                     .setTitle("پیام")
+                    .setIcon(R.drawable.warning)
+                    .setTopColorRes(R.color.Red)
                     .setMessage("خطایی در خواندن فایل بکاپ به وجود آمد.")
                     .setPositiveButton("بستن", null)
                     .show();
@@ -261,6 +347,8 @@ public class MenuActivity extends BaseAppCompatActivity {
     {
         new LovelyStandardDialog(MenuActivity.this, LovelyStandardDialog.ButtonLayout.VERTICAL)
                 .setTitle("پیام")
+                .setIcon(R.drawable.warning)
+                .setTopColorRes(R.color.Red)
                 .setMessage("برای بکاپ گرفتن باید حداقل یک فاکتور با یک محصول در داخل آن وجود داشته باشد.")
                 .setPositiveButton("OK",null)
                 .show();
@@ -269,6 +357,8 @@ public class MenuActivity extends BaseAppCompatActivity {
     {
         new LovelyStandardDialog(MenuActivity.this, LovelyStandardDialog.ButtonLayout.VERTICAL)
                 .setTitle("پیام")
+                .setIcon(R.drawable.succeed)
+                .setTopColorRes(R.color.green)
                 .setMessage("فایل بکاپ در حافظه با نام " + BackupFileName + " ساخته شد")
                 .setPositiveButton("OK",null)
                 .show();
@@ -278,7 +368,7 @@ public class MenuActivity extends BaseAppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode==RESULT_OK) {
             Uri selectedfile = data.getData();
-            importBackup(selectedfile.getPath());
+            showBackupMenu(selectedfile.getPath(),selectedfile.getPath());
 
         }
     }

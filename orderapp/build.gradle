@@ -12,11 +12,10 @@ android {
 
     defaultConfig {
         applicationId "ir.sweetsoft.orderapp"
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 28
-        versionCode 13
-        versionName "2.3"
-
+        versionCode 25
+        versionName "3.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     }
@@ -57,4 +56,7 @@ dependencies {
     implementation 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
     implementation 'com.yarolegovich:lovely-dialog:1.1.0'
     implementation 'com.android.support:multidex:1.0.3'
+    def acraVersion = '5.1.3'
+    implementation "ch.acra:acra-http:$acraVersion"
+    implementation 'com.google.code.gson:gson:2.8.6'
 }

@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -52,6 +53,9 @@ public class FactorProductRecyclerViewAdapter extends RecyclerView.Adapter<Facto
         holder.mIdView.setText(String.valueOf(adapterPosition+1));
         holder.mNameView.setText(itemObject.product.Name);
         holder.mCountView.setText(String.valueOf(itemObject.Count));
+
+        int color=itemObject.product.getTextColor();
+        holder.mNameView.setTextColor(ContextCompat.getColor(activity,color));
         if(holder.mItem.Description!=null)
             holder.mDescriptionView.setText(holder.mItem.Description+"");
 
