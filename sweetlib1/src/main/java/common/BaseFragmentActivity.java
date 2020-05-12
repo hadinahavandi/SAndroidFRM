@@ -98,25 +98,6 @@ public abstract class BaseFragmentActivity extends BaseAppCompatActivity {
     }
 
     public abstract int getMainContentID();
-    protected boolean shouldAskPermission() {
-        return (Build.VERSION.SDK_INT > 22);
-    }
-    protected void requestFileAccessPermission(int RequestCode)
-    {
-        ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},RequestCode);
-    }
-    @Override
-    public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
-        if (requestCode==1147) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            } else {
-                AlertDialog.Builder ab=new AlertDialog.Builder(this);
-                ab.setMessage("دسترسی لازم برای ذخیره فایل اعطا نشده است.لطفا اجازه ذخیره و مشاهده فایل را فراهم نمایید");
-                ab.setPositiveButton("OK",null);
-                ab.show();
-            }
-            return;
-        }
-    }
+    
 
 }

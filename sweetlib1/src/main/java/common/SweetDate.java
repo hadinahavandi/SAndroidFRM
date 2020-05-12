@@ -57,17 +57,9 @@ public class SweetDate {
 	}
 	public static String Time2DateString(Long Time,String DateSeparatorString)
 	{
-		Calendar cal = Calendar.getInstance();
-		cal.setTimeInMillis(Time);
-		CivilDate cd=new CivilDate();
-		String year = DateFormat.format("yyyy", cal).toString();
-		String month = DateFormat.format("MM", cal).toString();
-		String day = DateFormat.format("dd", cal).toString();
-		cd.setDate(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day));
-		PersianDate PDate=DateConverter.civilToPersian(cd);
-		return String.valueOf(PDate.getYear())+DateSeparatorString+String.valueOf(PDate.getMonth())+DateSeparatorString+String.valueOf(PDate.getDayOfMonth());
+		return Time2String(Time,DateSeparatorString,"",true,true,true,false,false);
 	}
-    public static String Time2String(Long Time,String DateSeparatorString,String TimeSeparatorString)
+	public static String Time2String(Long Time,String DateSeparatorString,String TimeSeparatorString,boolean hasYear,boolean hasMonth,boolean hasDay,boolean hasHour,boolean hasMinute)
 	{
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(Time);
@@ -79,7 +71,43 @@ public class SweetDate {
 		String Minute=DateFormat.format("mm", cal).toString();
 		cd.setDate(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day));
 		PersianDate PDate=DateConverter.civilToPersian(cd);
-        return String.valueOf(PDate.getYear())+DateSeparatorString+String.valueOf(PDate.getMonth())+DateSeparatorString+String.valueOf(PDate.getDayOfMonth() + " "+Hour+TimeSeparatorString+Minute);
+		String ResultDateString="";
+		if(hasYear)
+			ResultDateString=String.valueOf(PDate.getYear());
+		if(hasMonth)
+		{
+			if(ResultDateString.length()>0)
+				ResultDateString+=DateSeparatorString;
+			ResultDateString+=String.valueOf(PDate.getMonth());
+		}
+		if(hasDay)
+		{
+			if(ResultDateString.length()>0)
+				ResultDateString+=DateSeparatorString;
+			ResultDateString+=String.valueOf(PDate.getDayOfMonth());
+		}
+		if(hasHour)
+		{
+			if(ResultDateString.length()>0)
+				ResultDateString+=" ";
+			ResultDateString+=Hour;
+		}
+		if(hasMinute)
+		{
+			if(ResultDateString.length()>0)
+			{
+				if(hasHour)
+					ResultDateString+=TimeSeparatorString;
+				else
+					ResultDateString+=" ";
+			}
+			ResultDateString+=Minute;
+		}
+		return ResultDateString;
+	}
+    public static String Time2String(Long Time,String DateSeparatorString,String TimeSeparatorString)
+	{
+		return Time2String(Time,DateSeparatorString,TimeSeparatorString,true,true,true,true,true);
 	}
 	private static CivilDate GetDateFromTime(Long Time)
 	{
